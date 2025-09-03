@@ -1,0 +1,11 @@
+﻿@model CarRentalManagement.Models.Car
+@{
+    ViewData["Title"] = "Delete Car";
+}
+<h2>Delete Car</h2>
+<div class="alert alert-warning">Are you sure you want to delete <strong>@Model.CarName (@Model.CarModel)</strong>?</div>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="CarID" />
+    <button class="btn btn-danger" type="submit">Delete</button>
+    <a class="btn btn-secondary ms-2" asp-action="Index">Cancel</a>
+</form>

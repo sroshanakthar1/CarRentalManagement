@@ -1,0 +1,26 @@
+﻿@model IEnumerable<CarRentalManagement.Models.Booking>
+@{
+    ViewData["Title"] = "My Bookings";
+}
+<h2>My Bookings</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Car</th>
+            <th>Pickup</th>
+            <th>Return</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td>@b.Car!.CarName (@b.Car.CarModel)</td>
+                <td>@b.PickupDate.ToString("yyyy-MM-dd")</td>
+                <td>@b.ReturnDate.ToString("yyyy-MM-dd")</td>
+                <td>$@b.TotalCost</td>
+            </tr>
+        }
+    </tbody>
+</table>

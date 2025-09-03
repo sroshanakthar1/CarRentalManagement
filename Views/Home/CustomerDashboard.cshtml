@@ -1,0 +1,7 @@
+﻿@{
+    ViewData["Title"] = "Customer Dashboard";
+}
+<h2>Welcome, @ViewBag.Username!</h2>
+<p>What would you like to do today?</p>
+<a class="btn btn-primary" asp-controller="Bookings" asp-action="Create">Book a Car</a>
+<a class="btn btn-outline-secondary ms-2" asp-controller="Bookings" asp-action="MyBookings">View My Bookings</a>
