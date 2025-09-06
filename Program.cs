@@ -46,6 +46,7 @@ namespace CarRentalManagement
             app.UseRouting();
             app.UseSession();
             app.UseSession();
+            app.UseStaticFiles();
 
 
 

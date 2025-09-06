@@ -6,64 +6,157 @@
     var username = HttpContextAccessor.HttpContext.Session.GetString("Username");
 }
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - CRMS</title>
+
+    <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
     <link href="~/css/site.css" rel="stylesheet" />
     <style>
-        /* Extra polish */
-        .navbar-brand {
-            font-weight: 600;
-            letter-spacing: 1px;
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        .navbar-nav .nav-link {
-            padding: 0.5rem 1rem;
-            transition: background 0.2s ease-in-out, color 0.2s;
+        /* Navbar */
+        .navbar-dark .navbar-nav .nav-link {
+            font-weight: 500;
+            padding: 0.6rem 1rem;
+            transition: 0.3s;
         }
 
-            .navbar-nav .nav-link:hover {
-                background: rgba(255, 255, 255, 0.1);
+            .navbar-dark .navbar-nav .nav-link.active,
+            .navbar-dark .navbar-nav .nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.15);
                 border-radius: 6px;
             }
 
-        .navbar-text {
-            font-weight: 500;
+        /* Hero Section */
+        .hero {
+            background: url('/images/hero-car.jpg') center/cover no-repeat;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+            position: relative;
         }
+
+            .hero::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+            }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+            .hero-content h1 {
+                font-size: 3rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+            }
+
+            .hero-content p {
+                font-size: 1.25rem;
+                margin-bottom: 2rem;
+            }
+
+        /* Card Styles */
+        .car-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+            .car-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            }
+
+        .card-title {
+            font-weight: 600;
+        }
+
+        .card-price {
+            font-weight: 700;
+            color: #0d6efd;
+        }
+
+        /* Footer */
+        footer {
+            background: #212529;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+            footer a {
+                color: #adb5bd;
+                text-decoration: none;
+            }
+
+                footer a:hover {
+                    color: #fff;
+                }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
+
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                <i class="bi bi-car-front-fill me-1"></i> CRMS
-            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="nav">
                 <!-- Left Nav -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house-door me-1"></i> Home
+                        </a>
                     </li>
 
                     @if (role == "Admin")
                     {
-                        <li class="nav-item"><a class="nav-link" asp-controller="Cars" asp-action="Index">Manage Cars</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Bookings" asp-action="All">All Bookings</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Cars" asp-action="Index">
+                                <i class="bi bi-truck-front me-1"></i> Manage Cars
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Bookings" asp-action="All">
+                                <i class="bi bi-calendar-check me-1"></i> All Bookings
+                            </a>
+                        </li>
                     }
 
                     @if (role == "Customer")
                     {
-                        <li class="nav-item"><a class="nav-link" asp-controller="Bookings" asp-action="Create">Book a Car</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Bookings" asp-action="MyBookings">My Bookings</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Bookings" asp-action="Create">
+                                <i class="bi bi-plus-circle me-1"></i> Book a Car
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Bookings" asp-action="MyBookings">
+                                <i class="bi bi-clock-history me-1"></i> My Bookings
+                            </a>
+                        </li>
                     }
                 </ul>
 
@@ -73,25 +166,36 @@
                     {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle me-1"></i> @username
+                                <i class="bi bi-person-circle me-2"></i> @username
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                <li><a class="dropdown-item" asp-controller="CustomerProfile" asp-action="ViewProfile">My Profile</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="CustomerProfile" asp-action="ViewProfile">
+                                        <i class="bi bi-person-lines-fill"></i> My Profile
+                                    </a>
+                                </li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     }
                     else
                     {
-                        @* Show Login/Register for non-logged-in users or Customers *@
                         @if (string.IsNullOrEmpty(role) || role == "Customer")
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+                                <a class="nav-link" asp-controller="Account" asp-action="Register">
+                                    <i class="bi bi-pencil-square me-1"></i> Register
+                                </a>
                             </li>
                         }
                     }
@@ -100,16 +204,35 @@
         </div>
     </nav>
 
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Drive Your Dreams</h1>
+            <p>Find the perfect car and book it instantly with CRMS</p>
+            <a class="btn btn-primary btn-lg" asp-controller="Bookings" asp-action="Create">
+                <i class="bi bi-plus-circle me-1"></i> Book a Car
+            </a>
+        </div>
+    </section>
+
     <!-- Main Content -->
-    <main class="container py-4">
+    <main class="container py-5 flex-grow-1">
         @RenderBody()
     </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto py-3">
+        <div class="container text-center">
+            <small>
+                &copy; @DateTime.Now.Year CRMS |
+                <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a> ·
+                <a asp-controller="Home" asp-action="Contact">Contact Us</a>
+            </small>
+        </div>
+    </footer>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </body>
 </html>

@@ -12,27 +12,46 @@ namespace CarRentalManagement.Controllers
         private readonly ApplicationDbContext _db;
         public CarsController(ApplicationDbContext db) => _db = db;
 
-
+        // GET: Cars
         public async Task<IActionResult> Index()
         {
             var cars = await _db.Cars.AsNoTracking().ToListAsync();
             return View(cars);
         }
 
+        // GET: Cars/Details/5
+        public async Task<IActionResult> Details(int id)
+        {
+            var car = await _db.Cars.AsNoTracking().FirstOrDefaultAsync(c => c.CarID == id);
+            if (car == null) return NotFound();
+            return View(car);
+        }
 
+        // GET: Cars/Create
         [HttpGet]
         public IActionResult Create() => View(new Car());
 
-
+        // POST: Cars/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Car car)
         {
             if (!ModelState.IsValid) return View(car);
-            _db.Cars.Add(car);
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                _db.Cars.Add(car);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error saving car: {ex.Message}");
+                return View(car);
+            }
         }
 
+        // GET: Cars/Edit/5
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -41,34 +60,56 @@ namespace CarRentalManagement.Controllers
             return View(car);
         }
 
-
+        // POST: Cars/Edit
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Car car)
         {
             if (!ModelState.IsValid) return View(car);
-            _db.Cars.Update(car);
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                _db.Cars.Update(car);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_db.Cars.Any(e => e.CarID == car.CarID))
+                    return NotFound();
+
+                throw;
+            }
         }
 
-
+        // GET: Cars/Delete/5
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var car = await _db.Cars.FindAsync(id);
+            var car = await _db.Cars.AsNoTracking().FirstOrDefaultAsync(c => c.CarID == id);
             if (car == null) return NotFound();
             return View(car);
         }
 
-
+        // POST: Cars/DeleteConfirmed/5
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var car = await _db.Cars.FindAsync(id);
             if (car == null) return NotFound();
-            _db.Cars.Remove(car);
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                _db.Cars.Remove(car);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error deleting car: {ex.Message}");
+                return View(car);
+            }
         }
     }
 }
