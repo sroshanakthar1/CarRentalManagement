@@ -1,15 +1,46 @@
 ﻿@{
     ViewData["Title"] = "Admin Dashboard";
 }
-<h2>Admin Dashboard</h2>
-<div class="row g-3">
+<h2 class="mb-4">Admin Dashboard</h2>
+
+<div class="row g-4">
     <div class="col-md-4">
-        <div class="card text-bg-primary"><div class="card-body"><h5>Total Cars</h5><h2>@ViewBag.TotalCars</h2></div></div>
+        <div class="card text-white bg-primary shadow-sm rounded-3">
+            <div class="card-body d-flex align-items-center">
+                <div class="me-3">
+                    <i class="bi bi-car-front-fill fs-1"></i>
+                </div>
+                <div>
+                    <h6 class="card-title text-uppercase">Total Cars</h6>
+                    <h2 class="card-text fw-bold">@ViewBag.TotalCars</h2>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-md-4">
-        <div class="card text-bg-success"><div class="card-body"><h5>Available Cars</h5><h2>@ViewBag.AvailableCars</h2></div></div>
+        <div class="card text-white bg-success shadow-sm rounded-3">
+            <div class="card-body d-flex align-items-center">
+                <div class="me-3">
+                    <i class="bi bi-check-circle-fill fs-1"></i>
+                </div>
+                <div>
+                    <h6 class="card-title text-uppercase">Available Cars</h6>
+                    <h2 class="card-text fw-bold">@ViewBag.AvailableCars</h2>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-md-4">
-        <div class="card text-bg-dark"><div class="card-body"><h5>Total Bookings</h5><h2>@ViewBag.TotalBookings</h2></div></div>
+        <div class="card text-white bg-dark shadow-sm rounded-3">
+            <div class="card-body d-flex align-items-center">
+                <div class="me-3">
+                    <i class="bi bi-calendar-check-fill fs-1"></i>
+                </div>
+                <div>
+                    <h6 class="card-title text-uppercase">Total Bookings</h6>
+                    <h2 class="card-text fw-bold">@ViewBag.TotalBookings</h2>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

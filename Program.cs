@@ -15,6 +15,8 @@ namespace CarRentalManagement
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("CarRentalManagementConnection")));
+            builder.Services.AddSession();
+            builder.Services.AddHttpContextAccessor();
 
 
             builder.Services.AddDistributedMemoryCache();
@@ -43,6 +45,8 @@ namespace CarRentalManagement
             app.UseStaticFiles();
             app.UseRouting();
             app.UseSession();
+            app.UseSession();
+
 
 
             // Seed DB
