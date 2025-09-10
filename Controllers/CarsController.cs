@@ -22,9 +22,27 @@ namespace CarRentalManagement.Controllers
         }
 
         // GET: Cars
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter)
         {
             var cars = await _db.Cars.AsNoTracking().ToListAsync();
+
+            // Stats logic
+            ViewBag.TotalCars = cars.Count;
+            ViewBag.AvailableCars = cars.Count(c => c.IsAvailable);
+            ViewBag.BookedCars = cars.Count(c => !c.IsAvailable); // or use BookedCar if it's a property
+
+
+
+            // Apply filter
+            if (filter == "available")
+            {
+                cars = cars.Where(c => c.IsAvailable).ToList();
+            }
+            else if (filter == "booked")
+            {
+                cars = cars.Where(c => !c.IsAvailable).ToList();
+            }
+
             return View(cars);
         }
 
