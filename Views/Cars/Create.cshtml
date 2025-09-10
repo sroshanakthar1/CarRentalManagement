@@ -2,55 +2,68 @@
 @{
     ViewData["Title"] = "Create Car";
 }
-<h2>Create Car</h2>
-<form asp-action="Create" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="mb-3">
-        <label asp-for="CarName" class="form-label"></label>
-        <input asp-for="CarName" class="form-control" />
-        <span asp-validation-for="CarName" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="CarModel" class="form-label"></label>
-        <input asp-for="CarModel" class="form-control" />
-        <span asp-validation-for="CarModel" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Transmission " class="form-label"></label>
-        <input asp-for="Transmission " class="form-control" />
-        <span asp-validation-for="Transmission " class="text-danger"></span>
-    </div>
 
+<div class="card shadow-lg border-primary rounded-3 mt-4">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Create Car</h4>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="mb-3">
-        <label asp-for="FuelType" class="form-label"></label>
-        <input asp-for="FuelType"  class="form-control" />
-        <span asp-validation-for="FuelType" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="SeatingCapacity " class="form-label"></label>
-        <input asp-for="SeatingCapacity "  class="form-control" />
-        <span asp-validation-for="SeatingCapacity " class="text-danger"></span>
-    </div>
+            <div class="mb-3">
+                <label asp-for="CarName" class="form-label"></label>
+                <input asp-for="CarName" class="form-control" />
+                <span asp-validation-for="CarName" class="text-danger"></span>
+            </div>
 
-    <div class="mb-3">
-        <label asp-for="PricePerDay " class="form-label"></label>
-        <input asp-for="PricePerDay " class="form-control" />
-        <span asp-validation-for="PricePerDay " class="text-danger"></span>
-    </div>
+            <div class="mb-3">
+                <label asp-for="CarModel" class="form-label"></label>
+                <input asp-for="CarModel" class="form-control" />
+                <span asp-validation-for="CarModel" class="text-danger"></span>
+            </div>
 
-    <div class="mb-3">
-        <label asp-for="ImageUrl" class="form-label"></label>
-        <input asp-for="ImageUrl" type="file" class="form-control" />
-        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            <div class="mb-3">
+                <label asp-for="Transmission" class="form-label"></label>
+                <input asp-for="Transmission" class="form-control" />
+                <span asp-validation-for="Transmission" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FuelType" class="form-label"></label>
+                <input asp-for="FuelType" class="form-control" />
+                <span asp-validation-for="FuelType" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SeatingCapacity" class="form-label"></label>
+                <input asp-for="SeatingCapacity" class="form-control" />
+                <span asp-validation-for="SeatingCapacity" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PricePerDay" class="form-label"></label>
+                <input asp-for="PricePerDay" class="form-control" />
+                <span asp-validation-for="PricePerDay" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ImageUrl" class="form-label"></label>
+                <input asp-for="ImageUrl" type="file" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="IsAvailable" />
+                <label class="form-check-label" asp-for="IsAvailable">Available</label>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Save</button>
+            <a class="btn btn-secondary ms-2" asp-action="Index">Cancel</a>
+        </form>
     </div>
-    <div class="form-check mb-3">
-        <input class="form-check-input" asp-for="IsAvailable" />
-        <label class="form-check-label" asp-for="IsAvailable">Available</label>
-    </div>
-    <button class="btn btn-primary" type="submit">Save</button>
-    <a class="btn btn-secondary ms-2" asp-action="Index">Cancel</a>
-</form>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

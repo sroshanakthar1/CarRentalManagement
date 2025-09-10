@@ -1,7 +1,52 @@
 ﻿@{
     ViewData["Title"] = "Customer Dashboard";
 }
-<h2>Welcome, @ViewBag.Username!</h2>
-<p>What would you like to do today?</p>
-<a class="btn btn-primary" asp-controller="Bookings" asp-action="Create">Book a Car</a>
-<a class="btn btn-outline-secondary ms-2" asp-controller="Bookings" asp-action="MyBookings">View My Bookings</a>
+
+<div class="card customer-dashboard-card shadow-lg rounded-4 mt-4 border-0">
+    <div class="card-body text-center p-5">
+        <div class="mb-4">
+            <i class="bi bi-person-circle text-primary" style="font-size: 4rem;"></i>
+        </div>
+        <h2 class="fw-bold mb-2">Welcome, @ViewBag.Username!</h2>
+        <p class="text-muted mb-4">What would you like to do today?</p>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a class="btn btn-lg btn-primary px-4 action-btn" asp-controller="Bookings" asp-action="Create">
+                <i class="bi bi-car-front-fill me-2"></i> Book a Car
+            </a>
+            <a class="btn btn-lg btn-outline-secondary px-4 action-btn" asp-controller="Bookings" asp-action="MyBookings">
+                <i class="bi bi-calendar-check me-2"></i> View My Bookings
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Card hover effect */
+    .customer-dashboard-card {
+        border: 3px solid transparent;
+        background-image: linear-gradient(white, white), linear-gradient(90deg, #0d6efd, #6610f2);
+        background-origin: border-box;
+        background-clip: content-box, border-box;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .customer-dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 1.2rem 2rem rgba(0, 0, 0, 0.25);
+        }
+
+    /* Button hover effect */
+    .action-btn {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .action-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+</style>

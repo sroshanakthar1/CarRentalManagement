@@ -2,10 +2,26 @@
 @{
     ViewData["Title"] = "Delete Car";
 }
-<h2>Delete Car</h2>
-<div class="alert alert-warning">Are you sure you want to delete <strong>@Model.CarName (@Model.CarModel)</strong>?</div>
-<form asp-action="Delete" method="post">
-    <input type="hidden" asp-for="CarID" />
-    <button class="btn btn-danger" type="submit">Delete</button>
-    <a class="btn btn-secondary ms-2" asp-action="Index">Cancel</a>
-</form>
+
+<div class="card shadow-lg border-danger rounded-3 mt-4">
+    <div class="card-header bg-danger text-white">
+        <h4 class="mb-0">Delete Car</h4>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Are you sure you want to delete
+            <strong>@Model.CarName (@Model.CarModel)</strong>?
+        </div>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="CarID" />
+            <button class="btn btn-danger" type="submit">
+                <i class="bi bi-trash-fill me-1"></i> Delete
+            </button>
+            <a class="btn btn-secondary ms-2" asp-action="Index">
+                <i class="bi bi-x-circle me-1"></i> Cancel
+            </a>
+        </form>
+    </div>
+</div>
