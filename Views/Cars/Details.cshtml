@@ -5,60 +5,62 @@
 }
 
 <div class="card shadow-lg p-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>@Model.CarName (@Model.CarModel)</h2>
-        <a asp-action="Index" class="btn btn-outline-secondary">Back to Cars</a>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <dl class="row">
-                <dt class="col-sm-4">Name</dt>
-                <dd class="col-sm-8">@Model.CarName</dd>
-
-                <dt class="col-sm-4">Model</dt>
-                <dd class="col-sm-8">@Model.CarModel</dd>
-
-                <dt class="col-sm-4">Transmission</dt>
-                <dd class="col-sm-8">@Model.Transmission</dd>
-
-                <dt class="col-sm-4">Fuel Type</dt>
-                <dd class="col-sm-8">@Model.FuelType</dd>
-
-                <dt class="col-sm-4">Seating Capacity</dt>
-                <dd class="col-sm-8">@Model.SeatingCapacity</dd>
-
-                <dt class="col-sm-4">Price / Day</dt>
-                <dd class="col-sm-8">@Model.PricePerDay.ToString("C")</dd>
-
-                <dt class="col-sm-4">Availability</dt>
-                <dd class="col-sm-8">
-                    @if (Model.IsAvailable)
-                    {
-                        <span class="badge bg-success">Available</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger">Booked</span>
-                    }
-                </dd>
-            </dl>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>@Model.CarName (@Model.CarModel)</h2>
+            <a asp-action="Index" class="btn btn-outline-secondary">Back to Cars</a>
         </div>
 
-        <div class="col-md-4 text-center">
-            <!-- Placeholder for Car Image -->
-            <img src="~/Images/Cars/car3.webp"
-                 class="img-fluid rounded shadow-sm"
-                 alt="@Model.CarName"
-                 onerror="this.src='~/Images/Cars/car3.webp'" />
-        </div>
-    </div>
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Name</dt>
+                    <dd class="col-sm-8">@Model.CarName</dd>
 
-    <div class="mt-4 text-end">
-        <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-primary">Edit</a>
-        <a asp-action="Delete" asp-route-id="@Model.CarID" class="btn btn-outline-danger"
-           onclick="return confirm('Are you sure you want to delete this car?');">
-            Delete
-        </a>
-    </div>
+                    <dt class="col-sm-4">Model</dt>
+                    <dd class="col-sm-8">@Model.CarModel</dd>
+
+                    <dt class="col-sm-4">Transmission</dt>
+                    <dd class="col-sm-8">@Model.Transmission</dd>
+
+                    <dt class="col-sm-4">Fuel Type</dt>
+                    <dd class="col-sm-8">@Model.FuelType</dd>
+
+                    <dt class="col-sm-4">Seating Capacity</dt>
+                    <dd class="col-sm-8">@Model.SeatingCapacity</dd>
+
+                    <dt class="col-sm-4">Price / Day</dt>
+                    <dd class="col-sm-8">@Model.PricePerDay.ToString("C")</dd>
+
+
+                    <dt class="col-sm-4">Availability</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IsAvailable)
+                        {
+                            <span class="badge bg-success">Available</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Booked</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="col-md-4 text-center">
+                <img src="@Model.ImageUrl"
+                     width="300" height="200"   <!-- 👈 fixed size -->
+                class="img-fluid rounded shadow-sm"
+                alt="@Model.CarName"
+                onerror="this.src='/images/car/default.png'" />
+            </div>
+
+        </div>
+
+        <div class="mt-4 text-end">
+            <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-primary">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.CarID" class="btn btn-outline-danger"
+               onclick="return confirm('Are you sure you want to delete this car?');">
+                Delete
+            </a>
+        </div>
 </div>
