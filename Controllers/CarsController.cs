@@ -10,7 +10,14 @@ namespace CarRentalManagement.Controllers
     public class CarsController : Controller
     {
         private readonly ApplicationDbContext _db;
-        public CarsController(ApplicationDbContext db) => _db = db;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public CarsController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
+        {
+            _db = db;
+            _webHostEnvironment = webHostEnvironment;
+
+        }
 
         // GET: Cars
         public async Task<IActionResult> Index(string filter)
@@ -54,6 +61,21 @@ namespace CarRentalManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Car car)
         {
+            var file = HttpContext.Request.Form.Files;
+            if (file.Count > 0)
+            {
+                string webRootPath = _webHostEnvironment.WebRootPath;
+                string newFileName = Guid.NewGuid().ToString();
+                string upload = Path.Combine(webRootPath, @"images\car");
+                string extension = Path.GetExtension(file[0].FileName);
+
+                using (var fileStream = new FileStream(Path.Combine(upload, newFileName + extension), FileMode.Create))
+                {
+                    file[0].CopyTo(fileStream);  // ✅ Correct usage
+                }
+            }
+
+
             if (!ModelState.IsValid) return View(car);
 
             try
