@@ -15,10 +15,17 @@ namespace CarRentalManagement.Controllers
         }
 
         // Landing page (guest)
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var cars = await _db.Cars
+                .AsNoTracking()
+                .Where(c => c.IsAvailable)
+                .ToListAsync();
+
+            return View(cars);
         }
+
+
 
         // Admin Dashboard (protected)
         [AuthorizeRole("Admin")]
