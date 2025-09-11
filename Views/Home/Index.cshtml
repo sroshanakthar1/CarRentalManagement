@@ -186,16 +186,29 @@
                             <li>Fuel: @car.FuelType</li>
                         </ul>
                         <p class="fw-bold text-warning">Price/Day: @car.PricePerDay.ToString("C")</p>
+                        <!-- Status Badge -->
+                        @if (car.IsAvailable)
+                        {
+                            <span class="badge bg-success">Available</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Booked</span>
+                        }
                     </div>
-                    <div class="card-footer text-center">
-                        <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.CarID"
+                    <div class="card-footer d-flex justify-content-between">
+                        <a asp-controller="CustomerProfile" asp-action="Details" asp-route-id="@car.CarID"
                            class="btn btn-primary btn-sm">View Details</a>
+
                         <a asp-controller="Bookings" asp-action="Create" asp-route-id="@car.CarID"
-                           class="btn btn-outline-success btn-sm">Book Now</a>
+                           class="btn btn-primary btn-sm ">
+                            Book Now
+                        </a>
                     </div>
                 </div>
             </div>
         }
     </div>
     </div>
-</div>
+
+

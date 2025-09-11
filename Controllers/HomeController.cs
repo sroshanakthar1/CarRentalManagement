@@ -18,9 +18,8 @@ namespace CarRentalManagement.Controllers
         public async Task<IActionResult> Index()
         {
             var cars = await _db.Cars
-                .AsNoTracking()
-                .Where(c => c.IsAvailable)
-                .ToListAsync();
+           .AsNoTracking()
+           .ToListAsync();
 
             return View(cars);
         }
