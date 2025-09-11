@@ -1,0 +1,38 @@
+﻿@model IEnumerable<CarRentalManagement.Models.Brand>
+
+<h2>Brand List</h2>
+<a asp-action="Create" class="btn btn-primary mb-2">Add Brand</a>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Brand Name</th>
+            <th>Established Year</th>
+            <th>Logo</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var brand in Model)
+        {
+            <tr>
+                <td>@brand.Name</td>
+                <td>@brand.EstablishedYear</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(brand.BrandLogo))
+                    {
+                        <img src="@brand.BrandLogo" alt="@brand.Name Logo" width="80" />
+                    }
+                    else
+                    {
+                        <span>No Logo</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@brand.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@brand.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -31,6 +31,9 @@ namespace CarRentalManagement.Data
 
 
             await db.SaveChangesAsync();
+            
+
         }
     }
+
 }

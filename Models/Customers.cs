@@ -2,18 +2,21 @@
 
 namespace CarRentalManagement.Models
 {
-    public class Customers
+    public class Customer
     {
         [Key]
         public int CustomerId { get; set; }
 
-        [Required, StringLength(100)]
+        [Required(ErrorMessage = "Full Name is required")]
+        [StringLength(100)]
         public string FullName { get; set; } = string.Empty;
 
-        [Required, EmailAddress]
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress]
         public string Email { get; set; } = string.Empty;
 
-        [Required, Phone]
+        [Required(ErrorMessage = "Phone number is required")]
+        [Phone]
         public string Phone { get; set; } = string.Empty;
 
         [StringLength(50)]

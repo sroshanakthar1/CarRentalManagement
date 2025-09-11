@@ -12,8 +12,9 @@ namespace CarRentalManagement.Data
         public DbSet<User> Users => Set<User>();
         public DbSet<Car> Cars => Set<Car>();
         public DbSet<Booking> Bookings => Set<Booking>();
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<Customer>? Customers { get; set; }
 
-        public object Customers { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
