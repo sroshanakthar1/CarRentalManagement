@@ -167,51 +167,49 @@
             <a class="btn btn-outline-secondary" asp-controller="Account" asp-action="Register">Register</a>
         }
     </div>
-
+    <h2 class="mb-4">Available Cars</h2>
     <div class="row g-4">
-        <!-- Car 1 -->
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card shadow-sm">
-                <img src="~/Images/Cars/car3.webp" alt="Toyota Corolla" />
-                <div class="card-body">
-                    <h5 class="card-title">Toyota Corolla</h5>
-                    <p class="card-text">Comfortable sedan with great mileage. Perfect for city rides.</p>
-                </div>
-                <div class="card-footer d-flex justify-content-between align-items-center">
-                    <span class="price-tag">$40/day</span>
-                    <a class="btn btn-primary btn-sm" asp-controller="Bookings" asp-action="Create">Book Now</a>
-                </div>
-            </div>
-        </div>
+        @foreach (var car in Model)
+        {
+            <div class="col-sm-6 col-md-4">
+                <div class="card shadow-lg">
+                    <img src="@car.ImageUrl"
+                         alt="@car.CarName"
+                         style="width:300px; height:200px; object-fit:cover; margin:auto; border-radius:8px;"
+                         onerror="this.src='/images/car/default.png'" />
 
-        <!-- Car 2 -->
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card shadow-sm">
-                <img src="~/Images/Cars/car2.webp" alt="Honda Civic" />
-                <div class="card-body">
-                    <h5 class="card-title">Honda Civic</h5>
-                    <p class="card-text">Sporty and reliable. Enjoy smooth driving with style.</p>
-                </div>
-                <div class="card-footer d-flex justify-content-between align-items-center">
-                    <span class="price-tag">$55/day</span>
-                    <a class="btn btn-primary btn-sm" asp-controller="Bookings" asp-action="Create">Book Now</a>
-                </div>
-            </div>
-        </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@car.CarName (@car.CarModel)</h5>
+                        <ul class="list-unstyled">
+                            <li>Transmission: @car.Transmission</li>
+                            <li>Seats: @car.SeatingCapacity</li>
+                            <li>Fuel: @car.FuelType</li>
+                        </ul>
+                        <p class="fw-bold text-warning">Price/Day: @car.PricePerDay.ToString("C")</p>
+                        @if (car.IsAvailable)
+                        {
+                            <span class="badge bg-success">Available</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Booked</span>
+                        }
+                    </div>
 
-        <!-- Car 3 -->
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card shadow-sm">
-                <img src="~/Images/Cars/car1.webp" alt="BMW 3 Series" />
-                <div class="card-body">
-                    <h5 class="card-title">BMW 3 Series</h5>
-                    <p class="card-text">Luxury experience for long trips and business rides.</p>
-                </div>
-                <div class="card-footer d-flex justify-content-between align-items-center">
-                    <span class="price-tag">$100/day</span>
-                    <a class="btn btn-primary btn-sm" asp-controller="Bookings" asp-action="Create">Book Now</a>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a asp-controller="Car" asp-action="Details" asp-route-id="@car.CarID"
+                           class="btn btn-primary btn-sm">View Details</a>
+
+                        <a asp-controller="Bookings" asp-action="Create" asp-route-id="@car.CarID"
+                           class="btn btn-primary btn-sm">Book Now</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
-</div>
+    </div>
+
+
+
+
+

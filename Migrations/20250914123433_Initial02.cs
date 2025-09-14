@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarRentalManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial02 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,6 +20,10 @@ namespace CarRentalManagement.Migrations
                     CarName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CarModel = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Transmission = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    FuelType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    SeatingCapacity = table.Column<int>(type: "int", nullable: false),
+                    PricePerDay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

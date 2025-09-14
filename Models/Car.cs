@@ -17,10 +17,11 @@ namespace CarRentalManagement.Models
         public string? ImageUrl { get; set; }
 
         [Required, StringLength(20)]
-        public string Transmission { get; set; } // e.g., Automatic, Manual
+        public string Transmission { get; set; } = string.Empty;
+
 
         [Required, StringLength(20)]
-        public string FuelType { get; set; }   // e.g., Petrol, Diesel, Hybrid, Electric
+        public string FuelType { get; set; } = string.Empty;
 
         [Range(2, 10)]
         public int SeatingCapacity { get; set; } 

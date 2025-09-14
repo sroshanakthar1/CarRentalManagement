@@ -23,9 +23,9 @@ namespace CarRentalManagement.Data
             if (!await db.Cars.AnyAsync())
             {
                 db.Cars.AddRange(
-                new Car { CarName = "Honda Civic", CarModel = "2024", ImageUrl = "https://via.placeholder.com/400x250?text=Civic", IsAvailable = true },
-                new Car { CarName = "Toyota Corolla", CarModel = "2023", ImageUrl = "https://via.placeholder.com/400x250?text=Corolla", IsAvailable = true },
-                new Car { CarName = "Nissan Leaf", CarModel = "2022", ImageUrl = "https://via.placeholder.com/400x250?text=Leaf", IsAvailable = true }
+                new Car { CarName = "Honda Civic", CarModel = "2024", ImageUrl = "https://via.placeholder.com/400x250?text=Civic", IsAvailable = true , Transmission = "Automatic"},
+                new Car { CarName = "Toyota Corolla", CarModel = "2023", ImageUrl = "https://via.placeholder.com/400x250?text=Corolla", IsAvailable = true, Transmission = "Automatic" },
+                new Car { CarName = "Nissan Leaf", CarModel = "2022", ImageUrl = "https://via.placeholder.com/400x250?text=Leaf", IsAvailable = true, Transmission = "Automatic" }
                 );
             }
 
