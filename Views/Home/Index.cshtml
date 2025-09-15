@@ -197,7 +197,7 @@
                     </div>
 
                     <div class="card-footer d-flex justify-content-between">
-                        <a asp-controller="Car" asp-action="Details" asp-route-id="@car.CarID"
+                        <a asp-controller="CustomerProfile" asp-action="Details" asp-route-id="@car.CarID"
                            class="btn btn-primary btn-sm">View Details</a>
 
                         <a asp-controller="Bookings" asp-action="Create" asp-route-id="@car.CarID"
@@ -208,8 +208,70 @@
         }
     </div>
     </div>
+<footer class="footer mt-5 py-5" style="background:#111; color:#f5c518; border-top:3px solid #f5c518;">
+    <div class="container text-center">
+        <!-- Company Info -->
+        <h4 class="fw-bold">MotoFlex</h4>
+        <p class="mb-1">Your trusted partner for premium car rentals</p>
+        <p class="mb-3">📧 contact@motoflex.com | 📞 +94 77 123 4567</p>
 
+        <!-- Navigation Links -->
+        <div class="mb-3">
+            <a asp-controller="Home" asp-action="Index" class="footer-link">Home</a> |
+            <a asp-controller="Home" asp-action="Privacy" class="footer-link">Privacy Policy</a> |
+            <a asp-controller="Home" asp-action="Terms" class="footer-link">Terms & Conditions</a>
+        </div>
 
+        <!-- Social Icons -->
+        <div class="mb-3">
+            <a href="https://www.facebook.com" target="_blank" class="social-link me-3">
+                <i class="bi bi-facebook"></i>
+            </a>
+            <a href="https://www.youtube.com" target="_blank" class="social-link me-3">
+                <i class="bi bi-youtube"></i>
+            </a>
+            <a href="https://www.instagram.com" target="_blank" class="social-link">
+                <i class="bi bi-instagram"></i>
+            </a>
+        </div>
 
+        <!-- Payment Methods -->
+        <div class="mb-3">
+            <img src="/Images/payments/download.png" alt="Visa" class="mx-2" />
+        </div>
 
+        <p class="mt-3 mb-0" style="font-size:0.9rem; color:#aaa;">
+            © @DateTime.Now.Year MotoFlex. All rights reserved.
+        </p>
+    </div>
+</footer>
 
+<style>
+    .footer-link {
+        color: #f5c518;
+        text-decoration: none;
+        font-weight: 500;
+        margin: 0 5px;
+        transition: color 0.3s;
+    }
+
+        .footer-link:hover {
+            color: #fff;
+        }
+
+    .social-link {
+        font-size: 1.5rem;
+        color: #f5c518;
+        transition: color 0.3s, transform 0.2s;
+    }
+
+        .social-link:hover {
+            color: #fff;
+            transform: scale(1.2);
+        }
+
+    .footer img {
+        height: 40px;
+        vertical-align: middle;
+    }
+</style>

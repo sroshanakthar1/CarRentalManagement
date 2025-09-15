@@ -1,0 +1,53 @@
+﻿@model CarRentalManagement.Models.Car
+
+@{
+    ViewData["Title"] = "Car Details";
+}
+
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-4">Name</dt>
+                <dd class="col-sm-8">@Model.CarName</dd>
+
+                <dt class="col-sm-4">Model</dt>
+                <dd class="col-sm-8">@Model.CarModel</dd>
+
+                <dt class="col-sm-4">Transmission</dt>
+                <dd class="col-sm-8">@Model.Transmission</dd>
+
+                <dt class="col-sm-4">Fuel Type</dt>
+                <dd class="col-sm-8">@Model.FuelType</dd>
+
+                <dt class="col-sm-4">Seating Capacity</dt>
+                <dd class="col-sm-8">@Model.SeatingCapacity</dd>
+
+                <dt class="col-sm-4">Price / Day</dt>
+                <dd class="col-sm-8">@Model.PricePerDay.ToString("C")</dd>
+
+                <dt class="col-sm-4">Availability</dt>
+                <dd class="col-sm-8">
+                    @if (Model.IsAvailable)
+                    {
+                        <span class="badge bg-success">Available</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Booked</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4 text-center">
+            <img src="@Model.ImageUrl"
+                 width="300" height="200"
+                 class="img-fluid rounded shadow-sm"
+                 alt="@Model.CarName"
+                 onerror="this.src='/images/car/default.png'" />
+        </div>
+    </div>
+<div class="mt-4 text-end">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Home</a>
+</div>
+
+
