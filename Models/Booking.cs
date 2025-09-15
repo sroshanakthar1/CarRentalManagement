@@ -12,7 +12,7 @@ namespace CarRentalManagement.Models
 
         [Required]
         public int CustomerID { get; set; }
-        public User? Customer { get; set; }
+        public Users? Customer { get; set; }
 
 
         [Required]

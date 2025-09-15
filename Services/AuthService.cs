@@ -11,7 +11,7 @@ namespace CarRentalManagement.Services
         public AuthService(ApplicationDbContext db) => _db = db;
 
 
-        public async Task<User?> ValidateUserAsync(string username, string password)
+        public async Task<Users?> ValidateUserAsync(string username, string password)
         {
             return await _db.Users.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
         }

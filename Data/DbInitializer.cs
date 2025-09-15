@@ -14,8 +14,8 @@ namespace CarRentalManagement.Data
             if (!await db.Users.AnyAsync())
             {
                 db.Users.AddRange(
-                new User { Username = "admin", Password = "admin123", Role = "Admin" },
-                new User { Username = "alice", Password = "password", Role = "Customer" }
+                new Users { Username = "admin", Password = "admin123", Role = "Admin" },
+                new Users { Username = "alice", Password = "password", Role = "Customer" }
                 );
             }
 

@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Car Details";
 }
-
     <div class="row">
         <div class="col-md-6">
             <dl class="row">
@@ -46,8 +45,13 @@
                  onerror="this.src='/images/car/default.png'" />
         </div>
     </div>
-<div class="mt-4 text-end">
+@* <div class="mt-4 text-end">
     <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Home</a>
+</div> *@
+
+
+<div class="card-footer d-flex justify-content-between">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Home</a>
+    <a asp-controller="Account" asp-action="Login"
+       class="btn btn-primary btn-sm">Book Now</a>
 </div>
-
-

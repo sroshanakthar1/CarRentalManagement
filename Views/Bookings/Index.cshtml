@@ -1,0 +1,25 @@
+﻿@model List<CarRentalManagement.Models.Booking>
+@{
+    ViewData["Title"] = "Bookings List";
+}
+<h2>Bookings</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Car</th>
+            <th>Pickup Date</th>
+            <th>Return Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.Car.CarName (@booking.Car.CarModel)</td>
+                <td>@booking.PickupDate.ToShortDateString()</td>
+                <td>@booking.ReturnDate.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
