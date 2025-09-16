@@ -1,80 +1,88 @@
 ﻿using CarRentalManagement.Data;
 using CarRentalManagement.Models;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 
-public class BookingsController : Controller
+namespace CarRentalManagement.Controllers
 {
-    private readonly ApplicationDbContext _db;
-
-    public BookingsController(ApplicationDbContext db)
+    public class BookingsController : Controller
     {
-        _db = db;
-    }
+        private readonly ApplicationDbContext _db;
 
-    // GET: Bookings/Create
-    public async Task<IActionResult> Create(int carId)
-    {
-        // Find the car that was clicked
-        var car = await _db.Cars.FirstOrDefaultAsync(c => c.CarID == carId);
-        if (car == null)
-            return NotFound();
-
-        // Create a booking model with CarID pre-filled
-        var booking = new Booking
+        public BookingsController(ApplicationDbContext db)
         {
-            CarID = car.CarID,
-            Car = car
-        };
-
-        return View(booking);
-    }
-
-    // POST: Bookings/Create
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Booking booking)
-    {
-        if (ModelState.IsValid)
-        {
-            // Attach username from session
-            booking.Username = HttpContext.Session.GetString("Username");
-
-            // Calculate cost (simple: days × price)
-            var car = await _db.Cars.FindAsync(booking.CarID);
-            if (car != null)
-            {
-                var days = (booking.ReturnDate - booking.PickupDate).Days;
-                booking.TotalCost = days * car.PricePerDay;
-
-                // Mark car as unavailable
-                car.IsAvailable = false;
-            }
-
-            _db.Bookings.Add(booking);
-            await _db.SaveChangesAsync();
-
-            TempData["SuccessMessage"] = "Booking created successfully!";
-            return RedirectToAction(nameof(Index));
+            _db = db;
         }
 
-        return View(booking);
+        // GET: Bookings/Create
+        public async Task<IActionResult> Create()
+        {
+            // ✅ Check login session
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            // ✅ Load cars for dropdown
+            ViewBag.Cars = await _db.Cars.ToListAsync();
+
+            return View();
+        }
+
+        // POST: Bookings/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Booking booking)
+        {
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            // ✅ Find the logged-in user
+            var customer = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (customer == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            if (ModelState.IsValid)
+            {
+                booking.CustomerID = customer.UserID;  // link to logged-in user
+                booking.Username = customer.Username;  // store username for easy viewing
+
+                // ❗ You can calculate cost here if needed
+                // booking.TotalCost = (booking.ReturnDate - booking.PickupDate).Days * dailyRate;
+
+                _db.Bookings.Add(booking);
+                await _db.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Booking created successfully!";
+                return RedirectToAction("Index", "Bookings");
+            }
+
+            ViewBag.Cars = await _db.Cars.ToListAsync();
+            return View(booking);
+        }
+
+        // Show all bookings for the logged-in user
+        public async Task<IActionResult> Index()
+        {
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var bookings = await _db.Bookings
+                .Include(b => b.Car)
+                .Include(b => b.Customer)
+                .Where(b => b.Username == username)
+                .ToListAsync();
+
+            return View(bookings);
+        }
     }
-
-    // GET: Bookings/Index
-    public async Task<IActionResult> Index()
-    {
-        var bookings = await _db.Bookings
-            .Include(b => b.Car)
-            .Include(b => b.Customer)
-            .ToListAsync();
-
-        return View(bookings);
-    }
-
-
 }
-
-
