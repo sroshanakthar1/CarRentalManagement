@@ -39,7 +39,7 @@
                 <td>@(string.IsNullOrEmpty(user.NationalID) ? "Passport" : "NIC")</td>
                 <td>@(string.IsNullOrEmpty(user.NationalID) ? user.PassportNumber : user.NationalID)</td>
                 <td>@user.Username</td>
-                <td>@user.Password</td>
+                <td>Password</td>
                 <td>@user.Role</td>
             </tr>
         }

@@ -1,25 +1,40 @@
-﻿@model List<CarRentalManagement.Models.Booking>
-@{
-    ViewData["Title"] = "Bookings List";
-}
-<h2>Bookings</h2>
+﻿@model IEnumerable<CarRentalManagement.Models.Booking>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Car</th>
-            <th>Pickup Date</th>
-            <th>Return Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var booking in Model)
-        {
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<h2>My Bookings</h2>
+
+@if (!Model.Any())
+{
+    <p>No bookings yet.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@booking.Car.CarName (@booking.Car.CarModel)</td>
-                <td>@booking.PickupDate.ToShortDateString()</td>
-                <td>@booking.ReturnDate.ToShortDateString()</td>
+                <th>Car</th>
+                <th>Pickup Date</th>
+                <th>Return Date</th>
+                <th>Total Cost</th>
+                <th>Status</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var booking in Model)
+            {
+                <tr>
+                    <td>@booking.Car?.CarName (@booking.Car?.CarModel)</td>
+                    <td>@booking.PickupDate.ToShortDateString()</td>
+                    <td>@booking.ReturnDate.ToShortDateString()</td>
+                    <td>@booking.TotalCost.ToString("C")</td>
+                    <td>
+                        @(booking.Car?.IsAvailable == false ? "Booked" : "Available")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

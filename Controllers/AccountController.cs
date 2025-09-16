@@ -36,7 +36,7 @@ namespace CarRentalManagement.Controllers
                 HttpContext.Session.SetString("Username", user.Username);
 
                 // Redirect to Bookings/Create page
-                return RedirectToAction("Create", "Bookings");
+                return RedirectToAction("Index", "Bookings");
             }
 
             // ❌ Login failed

@@ -14,42 +14,65 @@ namespace CarRentalManagement.Controllers
             _db = db;
         }
 
-        // GET: Users/Index
+        // Show all users
         public async Task<IActionResult> Index()
         {
             var users = await _db.Users.ToListAsync();
             return View(users);
         }
 
-        // GET: Users/Create
+        // GET: Create form
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Users/Create
+        // POST: Save user to DB
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [HttpPost]
-
-        
         public async Task<IActionResult> Create(Users user)
         {
             if (ModelState.IsValid)
             {
-                // Handle NationalID / Passport
-                if (string.IsNullOrEmpty(user.NationalID) && !string.IsNullOrEmpty(user.PassportNumber))
-                    user.NationalID = string.Empty;
-                else if (!string.IsNullOrEmpty(user.NationalID))
-                    user.PassportNumber = string.Empty;
-
-                _db.Users.Add(user);      // <-- username and password saved here
+                _db.Add(user);
                 await _db.SaveChangesAsync();
 
-                return RedirectToAction("Login", "Account");  // send user to login page
+                // ✅ Show success message (TempData keeps it for 1 redirect)
+                TempData["SuccessMessage"] = "You have registered successfully. Please log in.";
+
+                // ✅ Redirect to Login page instead of Index
+                return RedirectToAction("Login", "Users");
             }
 
             return View(user);
         }
+
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(string username, string password)
+        {
+            var user = await _db.Users
+                .FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+
+            if (user != null)
+            {
+                // ✅ Successful login
+                HttpContext.Session.SetString("Username", user.Username);
+
+                // Redirect to Bookings/Create page
+                return RedirectToAction("Create", "Bookings");
+            }
+
+            // ❌ Invalid login
+            ViewBag.Error = "Invalid username or password";
+            return View();
+        }
     }
 }
+

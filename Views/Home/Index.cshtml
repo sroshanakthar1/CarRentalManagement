@@ -198,10 +198,10 @@
 
                     <div class="card-footer d-flex justify-content-between">
                         <a asp-controller="CustomerProfile" asp-action="Details" asp-route-id="@car.CarID"
-                           class="btn btn-primary btn-sm">View Details</a>
+                           class="btn btn-primary btn-sm">View </a>
 
-                        <a asp-controller="Account" asp-action="Login" asp-route-id="@car.CarID"
-                           class="btn btn-primary btn-sm">Book Now</a>
+                        <a asp-controller="Bookings" asp-action="Create" asp-route-carId="@car.CarID"
+                           class="btn btn-success btn-sm">Book Now</a>
                     </div>
                 </div>
             </div>
