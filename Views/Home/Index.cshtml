@@ -167,6 +167,23 @@
             <a class="btn btn-outline-secondary" asp-controller="Account" asp-action="Register">Register</a>
         }
     </div>
+
+    <form asp-controller="Home" asp-action="SearchAvailable" method="get" class="row g-3 justify-content-center">
+        <div class="col-md-3">
+            <label for="pickupDate" class="form-label">Pickup Date</label>
+            <input type="date" id="pickupDate" name="pickupDate" class="form-control" required />
+        </div>
+        <div class="col-md-3">
+            <label for="dropoffDate" class="form-label">Drop-off Date</label>
+            <input type="date" id="dropoffDate" name="dropoffDate" class="form-control" required />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </form>
+
+
+
     <h2 class="mb-4">Available Cars</h2>
     <div class="row g-4">
         @foreach (var car in Model)
@@ -208,6 +225,8 @@
         }
     </div>
     </div>
+
+
 <footer class="footer mt-5 py-5" style="background:#111; color:#f5c518; border-top:3px solid #f5c518;">
     <div class="container text-center">
         <!-- Company Info -->

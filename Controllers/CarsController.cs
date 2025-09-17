@@ -1,6 +1,7 @@
 ﻿using CarRentalManagement.Data;
 using CarRentalManagement.Filters;
 using CarRentalManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -151,5 +152,8 @@ namespace CarRentalManagement.Controllers
                 return View(car);
             }
         }
+
+
+
     }
 }

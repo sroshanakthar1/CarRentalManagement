@@ -1,5 +1,6 @@
 using CarRentalManagement.Data;
 using CarRentalManagement.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,5 +47,41 @@ namespace CarRentalManagement.Controllers
             ViewBag.Username = HttpContext.Session.GetString("Username");
             return View();
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> SearchAvailable(DateTime pickupDate, DateTime dropoffDate)
+        {
+            if (pickupDate >= dropoffDate)
+            {
+                ModelState.AddModelError("", "Drop-off date must be after pickup date.");
+                return RedirectToAction("Index");
+            }
+
+            Console.WriteLine($"Search: {pickupDate:yyyy-MM-dd} ? {dropoffDate:yyyy-MM-dd}");
+
+            // Find cars booked in this time range
+            var bookedCarIds = await _db.Bookings
+                .Where(b => pickupDate < b.ReturnDate && dropoffDate > b.PickupDate)
+                .Select(b => b.CarID)
+                .ToListAsync();
+
+            Console.WriteLine("Booked Car IDs: " + string.Join(", ", bookedCarIds));
+
+            // Find cars NOT booked in that time range
+            var availableCars = await _db.Cars
+                .Where(c => !bookedCarIds.Contains(c.CarID)) // Removed IsAvailable for debugging
+                .ToListAsync();
+
+            Console.WriteLine("Available Cars:");
+            foreach (var car in availableCars)
+            {
+                Console.WriteLine($"- {car.CarName} ({car.CarID})");
+            }
+
+            return View("Available", availableCars);
+        }
+
+
     }
 }

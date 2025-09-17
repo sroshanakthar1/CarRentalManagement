@@ -1,0 +1,42 @@
+﻿@model IEnumerable<CarRentalManagement.Models.Car>
+@{
+    ViewData["Title"] = "Available Cars";
+}
+
+<h2 class="mb-4">Available Cars</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">No cars available for the selected period.</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var car in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <img src="~/@car.ImageUrl" class="card-img-top" alt="@car.CarName" style="height:200px; object-fit:cover;" />
+                    <div class="card-body">
+                        <h5 class="card-title">@car.CarName (@car.CarModel)</h5>
+                        <p class="card-text">
+                            Fuel: @car.FuelType <br />
+                            Transmission: @car.Transmission <br />
+                            Seats: @car.SeatingCapacity <br />
+                            <strong>@car.PricePerDay.ToString("C") / day</strong>
+                        </p>
+                        <a class="btn btn-success w-100"
+                           asp-controller="Bookings"
+                           asp-action="Create"
+                           asp-route-carId="@car.CarID"
+                           asp-route-pickupDate="@Context.Request.Query["pickupDate"]"
+                           asp-route-returnDate="@Context.Request.Query["returnDate"]">
+                            Book Now
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
