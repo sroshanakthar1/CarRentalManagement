@@ -213,12 +213,19 @@
                         }
                     </div>
 
+
                     <div class="card-footer d-flex justify-content-between">
                         <a asp-controller="CustomerProfile" asp-action="Details" asp-route-id="@car.CarID"
-                           class="btn btn-primary btn-sm">View Details</a>
+                           class="btn btn-motoflex">View</a>
 
-                        <a asp-controller="Bookings" asp-action="Create" asp-route-id="@car.CarID"
-                           class="btn btn-primary btn-sm">Book Now</a>
+                        <a asp-controller="Bookings"
+                           asp-action="Create"
+                           asp-route-carId="@car.CarID"
+                           asp-route-pickupDate="@DateTime.Today.ToString("yyyy-MM-dd")"
+                           asp-route-returnDate="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")"
+                           class="btn btn-motoflex">
+                            Book Now
+                        </a>
                     </div>
                 </div>
             </div>
@@ -266,31 +273,28 @@
 </footer>
 
 <style>
-    .footer-link {
+    /* Custom Buttons */
+    .btn-motoflex {
+        background: #000;
+        border: 2px solid #f5c518;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 600;
         color: #f5c518;
-        text-decoration: none;
-        font-weight: 500;
-        margin: 0 5px;
-        transition: color 0.3s;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
     }
 
-        .footer-link:hover {
-            color: #fff;
+        .btn-motoflex:hover {
+            background: #f5c518;
+            color: #000;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
-    .social-link {
-        font-size: 1.5rem;
-        color: #f5c518;
-        transition: color 0.3s, transform 0.2s;
-    }
-
-        .social-link:hover {
-            color: #fff;
-            transform: scale(1.2);
-        }
-
-    .footer img {
-        height: 40px;
-        vertical-align: middle;
+    .card-footer .btn {
+        flex: 1;
+        margin: 0 3px;
     }
 </style>
+

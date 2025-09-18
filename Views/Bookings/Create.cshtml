@@ -1,33 +1,81 @@
-﻿@model CarRentalManagement.Models.BookingViewModel
+﻿<h1>One Step Your Car</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-warning text-white text-center">
+                    <h3>Booking Pages</h3>
+                </div>
+                <div class="card-body">
+                    <!-- ✅ Centered and resized image -->
+                    <div class="d-flex justify-content-center mb-3">
+                        <img src="@Model.CarImageUrl" alt="Car Image" class="img-fluid rounded" style="max-height: 200px; width: auto;" />
+                    </div>
 
-@{
-    ViewData["Title"] = "New Booking";
+                    <!-- ✅ Car details -->
+                    <h5 class="card-title text-center">@Model.CarName (@Model.CarModel)</h5>
+                    <p>Transmission: <strong>@Model.Transmission</strong></p>
+                    <p>Seats: <strong>@Model.SeatingCapacity</strong></p>
+                    <p>Fuel: <strong>@Model.FuelType</strong></p>
+                    <p class="fw-bold text-warning">Price/Day: @Model.CarPrice.ToString("C")</p>
+
+                    <!-- ✅ Booking form -->
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="PickupDate" class="form-label">Pickup Date</label>
+                            <input type="date" id="PickupDate" name="PickupDate"
+                                   value="@Model.PickupDate.ToString("yyyy-MM-dd")"
+                                   class="form-control" readonly />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="ReturnDate" class="form-label">Return Date</label>
+                            <input type="date" id="ReturnDate" name="ReturnDate"
+                                   value="@Model.ReturnDate.ToString("yyyy-MM-dd")"
+                                   class="form-control" readonly />
+                        </div>
+
+                        <!-- Hidden field for backend -->
+                        <input type="hidden" id="TotalCost" name="TotalCost" value="@Model.TotalCost" />
+
+                        <!-- ✅ Visible total cost with label -->
+                        <div class="mb-3">
+                            <label for="TotalCostDisplay" class="form-label">Total Cost</label>
+                            <input type="text" id="TotalCostDisplay" value="@Model.TotalCost.ToString("F2")" readonly class="form-control text-success fw-bold" />
+                        </div>
+
+                        <button type="submit" class="btn btn-warning w-100">Confirm Booking</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const pricePerDay = @Model.CarPrice;
+
+        function calculateTotal() {
+            const pickup = new Date(document.getElementById("PickupDate").value);
+            const ret = new Date(document.getElementById("ReturnDate").value);
+
+            if (!isNaN(pickup) && !isNaN(ret) && ret > pickup) {
+                const days = (ret - pickup) / (1000 * 3600 * 24);
+                const total = days * pricePerDay;
+
+                document.getElementById("TotalCost").value = total.toFixed(2);
+                document.getElementById("TotalCostDisplay").value = total.toFixed(2);
+            } else {
+                document.getElementById("TotalCost").value = "";
+                document.getElementById("TotalCostDisplay").value = "";
+            }
+        }
+
+        document.getElementById("PickupDate").addEventListener("change", calculateTotal);
+        document.getElementById("ReturnDate").addEventListener("change", calculateTotal);
+
+        window.onload = calculateTotal;
+    </script>
 }
-
-<h2>New Booking</h2>
-
-@if (!string.IsNullOrEmpty(Model.Error))
-{
-    <div class="alert alert-danger">@Model.Error</div>
-}
-
-<form asp-action="Create" method="post">
-    <input type="hidden" asp-for="CarID" />
-
-    <div class="mb-3">
-        <label asp-for="PickupDate" class="form-label"></label>
-        <input asp-for="PickupDate" class="form-control" readonly />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="ReturnDate" class="form-label"></label>
-        <input asp-for="ReturnDate" class="form-control" readonly />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="TotalCost" class="form-label"></label>
-        <input asp-for="TotalCost" class="form-control" readonly />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Confirm Booking</button>
-</form>

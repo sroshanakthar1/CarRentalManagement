@@ -17,6 +17,8 @@ namespace CarRentalManagement.Models
 
         [Required]
         public int CarID { get; set; }
+       
+
         public Car? Car { get; set; }
 
 
@@ -30,5 +32,6 @@ namespace CarRentalManagement.Models
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal TotalCost { get; set; }
+        public string Username { get; internal set; }
     }
 }

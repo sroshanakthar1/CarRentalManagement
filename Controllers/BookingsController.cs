@@ -15,32 +15,39 @@ namespace CarRentalManagement.Controllers
         }
 
         [HttpGet]
+
+        [HttpGet]
         public IActionResult Create(int carId, DateTime pickupDate, DateTime returnDate)
         {
             var days = (returnDate - pickupDate).Days;
             if (days <= 0)
             {
-                return View(new BookingViewModel { Error = "Invalid booking dates." });
+                return View(new ViewModels.BookingViewModel { Error = "Invalid booking dates." });
             }
 
-            var car = _db.Cars.Find(carId);
+            var car = _db.Cars.FirstOrDefault(c => c.CarID == carId);
             if (car == null)
             {
                 return NotFound();
             }
 
-            var model = new BookingViewModel
+            var model = new ViewModels.BookingViewModel
             {
-                CarID = carId,
+                CarID = car.CarID,
+                CarName = car.CarName,
+                CarModel = car.CarModel,
+                CarPrice = car.PricePerDay,
                 PickupDate = pickupDate,
                 ReturnDate = returnDate,
                 TotalCost = car.PricePerDay * days,
-                SelectedCarId = carId
+                SelectedCarId = car.CarID,
+                CarImageUrl = car.ImageUrl,
+                Transmission = car.Transmission,
+                FuelType = car.FuelType,
+                SeatingCapacity = car.SeatingCapacity
             };
 
             return View(model);
         }
-
-
     }
 }
