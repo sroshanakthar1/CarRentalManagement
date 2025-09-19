@@ -1,4 +1,5 @@
 using CarRentalManagement.Data;
+using CarRentalManagement.Repostories;
 using CarRentalManagement.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<CustomerRepository>();
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
@@ -36,13 +39,13 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ApplicationDbContext>();
-    context.Database.Migrate();       // Apply migrations
+    context.Database.Migrate();
     await DbInitializer.SeedAsync(context);
 }
 
 // Map routes
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Customer}/{action=Index}/{id?}");
+    pattern: "{controller=Payment}/{action=Create}/{id?}");
 
 app.Run();

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<CarRentalManagement.Models.Payment>
+@{
+    ViewData["Title"] = "Payments";
+}
+<h2>Payments</h2>
+<a asp-action="Create" class="btn btn-primary mb-2">Add Payment</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>BookingId</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.BookingId</td>
+                <td>@item.Amount</td>
+                <td>@item.PaymentMethod</td>
+                <td>@item.PaymentDate.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
