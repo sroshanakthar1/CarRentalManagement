@@ -6,11 +6,14 @@ namespace CarRentalManagement.Models
 {
     public class Booking
     {
+        private string username;
+
         [Key]
         public int BookingID { get; set; }
 
 
         [Required]
+        public string Username { get => username; internal set => username = value; }
         public int CustomerID { get; set; }
         public User? Customer { get; set; }
 
@@ -32,6 +35,10 @@ namespace CarRentalManagement.Models
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal TotalCost { get; set; }
-        public string Username { get; internal set; }
+       
+        public DateTime BookingDate { get; internal set; }
+        public int UserID { get; set; }  // Foreign key
+
+        public User? User { get; set; }  // Navigation property
     }
 }

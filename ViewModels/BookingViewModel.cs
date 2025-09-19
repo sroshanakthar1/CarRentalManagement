@@ -17,6 +17,7 @@
         public int SelectedCarId { get; set; }
         public string? Error { get; set; }
 
+        public int UserID { get; set; }
 
     }
 }

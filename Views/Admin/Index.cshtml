@@ -22,21 +22,21 @@
             </div>
         </form>
 
-        <p class="text-center mt-3">
-            Don’t have an account?
-            <a asp-controller="Users" asp-action="Create">Register here</a>
+        <p class="text-center mt-3" style="font-size: 0.9rem;">
+            Don't have an account?
+            <a asp-controller="Account" asp-action="Register" class="text-warning fw-bold">Register here</a>
         </p>
     </div>
 </div>
 
 <style>
     body {
-        background-color: #000;
+        background-color: #000; /* Dark background */
     }
 
     .card {
-        background-color: #1a1a1a;
-        color: #fff;
+        background-color: #1a1a1a; /* Dark card background */
+        color: #fff; /* White text */
     }
 
     .form-control {
@@ -57,4 +57,3 @@
         border-color: #f5c518;
     }
 </style>
-

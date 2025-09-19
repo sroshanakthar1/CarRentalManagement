@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarRentalManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial02 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,7 +23,7 @@ namespace CarRentalManagement.Migrations
                     Transmission = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     FuelType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     SeatingCapacity = table.Column<int>(type: "int", nullable: false),
-                    PricePerDay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PricePerDay = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -37,8 +37,15 @@ namespace CarRentalManagement.Migrations
                 {
                     UserID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Nationality = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    NationalID = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    PassportNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Role = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
@@ -56,7 +63,8 @@ namespace CarRentalManagement.Migrations
                     CarID = table.Column<int>(type: "int", nullable: false),
                     PickupDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalCost = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
+                    TotalCost = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

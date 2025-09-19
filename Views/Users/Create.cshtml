@@ -1,0 +1,100 @@
+﻿@model CarRentalManagement.Models.User
+
+@{
+    ViewData["Title"] = "Create User";
+}
+
+<h2>Create User</h2>
+
+<form asp-controller="Users" asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label"></label>
+        <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label"></label>
+        <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Nationality" class="form-label"></label>
+        <input asp-for="Nationality" class="form-control" placeholder="Enter nationality" />
+        <span asp-validation-for="Nationality" class="text-danger"></span>
+    </div>
+
+    <!-- ID Type Selector -->
+    <div class="mb-3">
+        <label>ID Type</label>
+        <select class="form-control" id="idTypeSelect" onchange="toggleIDFields()">
+            <option value="NIC">National ID</option>
+            <option value="Passport">Passport</option>
+        </select>
+        <input type="hidden" name="IDType" id="IDTypeHidden" />
+    </div>
+
+    <!-- NIC Field -->
+    <div class="mb-3" id="nicField">
+        <label asp-for="NationalID" class="form-label"></label>
+        <input asp-for="NationalID" class="form-control" placeholder="Enter NIC number" />
+        <span asp-validation-for="NationalID" class="text-danger"></span>
+    </div>
+
+    <!-- Passport Field -->
+    <div class="mb-3" id="passportField" style="display:none;">
+        <label asp-for="PassportNumber" class="form-label"></label>
+        <input asp-for="PassportNumber" class="form-control" placeholder="Enter passport number" />
+        <span asp-validation-for="PassportNumber" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Username" class="form-label"></label>
+        <input asp-for="Username" class="form-control" placeholder="Choose a username" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" type="email" class="form-control" placeholder="Enter email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" placeholder="Enter phone number" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <!-- Role (default Customer, readonly) -->
+    <div class="mb-3">
+        <label asp-for="Role" class="form-label"></label>
+        <input asp-for="Role" class="form-control" value="Customer" readonly />
+    </div>
+    <div class="mb-3">
+        <a asp-controller="Account" asp-action="Login" class="btn btn-warning w-100 text-white">
+            Create 
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function toggleIDFields() {
+            var type = document.getElementById("idTypeSelect").value;
+            document.getElementById("nicField").style.display = (type === "NIC") ? "block" : "none";
+            document.getElementById("passportField").style.display = (type === "Passport") ? "block" : "none";
+        }
+    </script>
+}

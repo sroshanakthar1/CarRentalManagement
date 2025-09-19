@@ -1,4 +1,4 @@
-using CarRentalManagement.Data;
+﻿using CarRentalManagement.Data;
 using CarRentalManagement.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,14 +10,10 @@ namespace CarRentalManagement
         {
             var builder = WebApplication.CreateBuilder(args);
 
-
             // Add services
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("CarRentalManagementConnection")));
-            builder.Services.AddSession();
-            builder.Services.AddHttpContextAccessor();
-
+                options.UseSqlServer(builder.Configuration.GetConnectionString("CarRentalManagementConnection")));
 
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
@@ -28,12 +24,10 @@ namespace CarRentalManagement
                 options.Cookie.IsEssential = true;
             });
 
-
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IAuthService, AuthService>();
 
-
             var app = builder.Build();
-
 
             // Configure HTTP pipeline
             if (!app.Environment.IsDevelopment())
@@ -41,31 +35,26 @@ namespace CarRentalManagement
                 app.UseExceptionHandler("/Home/Error");
             }
 
-
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseSession();
-            app.UseSession();
-            app.UseStaticFiles();
 
-
+            app.UseSession(); // Must be before UseAuthorization
+            app.UseAuthorization();
 
             // Seed DB
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<ApplicationDbContext>();
-                //context.Database.Migrate();
                 await DbInitializer.SeedAsync(context);
             }
 
-
             app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
-
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }
     }
+
 }
