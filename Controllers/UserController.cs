@@ -1,95 +1,92 @@
 ﻿using CarRentalManagement.Data;
 using CarRentalManagement.Models;
+using CarRentalManagement.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace CarRentalManagement.Controllers
 {
-    public class UsersController : Controller
+    public class UserController : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public UsersController(ApplicationDbContext context)
+        private readonly IAuthService _auth;
+        private readonly ApplicationDbContext _db;
+        public UserController(IAuthService auth, ApplicationDbContext db)
         {
-            _context = context;
+            _auth = auth; _db = db;
         }
 
-        // GET: Users
-        public async Task<IActionResult> Index()
+
+        [HttpGet]
+        public IActionResult Login(string? error = null)
         {
-            var users = await _context.Users.ToListAsync();
-            return View(users);
-        }
-
-        // GET: Users/Create
-        public IActionResult Create()
-        {
-            var user = new User { Role = "Customer" };
-            return View(user);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(User user)
-        {
-            if (_context.Users.Any(u => u.Username == user.Username))
-            {
-                ViewBag.Error = "Username already exists.";
-                return View(user);
-            }
-
-            user.Role = "Customer"; // default role
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-
-            // Use TempData to show success after redirect
-            TempData["Success"] = $"🎉 Account created successfully! You can now login with username: {user.Username}";
-
-            // Redirect to Login page
-            return RedirectToAction("Login", "User");
-        }
-
-        // Optional: Details view if needed later
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-                return NotFound();
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserID == id);
-            if (user == null)
-                return NotFound();
-
-            return View(user);
-        }
-        
-
-         public IActionResult Login()
-        {
+            ViewBag.Error = error;
             return View();
         }
 
-        // POST: Users/Login
-        [HttpPost]
-        public IActionResult Login(string username, string password)
-        {
-            var user = _context.Users.FirstOrDefault(u => u.Username == username && u.Password == password && u.Role == "Customer");
 
+        [HttpPost]
+        public async Task<IActionResult> Login(string username, string password)
+        {
+            var user = await _auth.ValidateUserAsync(username, password);
             if (user == null)
             {
                 ViewBag.Error = "❌ Invalid username or password.";
                 return View();
             }
 
-            // Save session
+            HttpContext.Session.SetInt32("UserID", user.UserID);
             HttpContext.Session.SetString("Username", user.Username);
             HttpContext.Session.SetString("Role", user.Role);
 
-            TempData["Success"] = $"✅ Welcome {user.Username}, login successful!";
+            TempData["LoginSuccess"] = $"🎉 Welcome {user.Username}, login successful!";
+            return RedirectToAction("Index", "Payment");
+        }
 
-            return RedirectToAction("Index", "Home"); // Redirect to customer home/dashboard
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var users = await _db.Users.ToListAsync();
+            return View(users);
+        }
+        // ---------------- CREATE ----------------
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(); // opens Create.cshtml
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(User user)
+        {
+            if (!ModelState.IsValid)
+                return View(user);
+
+            // Check username uniqueness
+            var exists = await _db.Users.AnyAsync(u => u.Username == user.Username);
+            if (exists)
+            {
+                ViewBag.Error = "❌ Username already exists.";
+                return View(user);
+            }
+
+            // Default role
+            user.Role = "Customer";
+
+            _db.Users.Add(user);
+            await _db.SaveChangesAsync();
+
+            TempData["Success"] = $"🎉 Registration successful! Please login with username: {user.Username}";
+            return RedirectToAction("Login");
         }
     }
 }
+
+
+    
+
+
+        
 

@@ -8,11 +8,5 @@
         public string? Username { get; set; }
         public DateTime PickupDate { get; set; }
         public DateTime ReturnDate { get; set; }
-
-
-
-
-
-
     }
 }

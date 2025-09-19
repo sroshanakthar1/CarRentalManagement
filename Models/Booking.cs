@@ -10,7 +10,7 @@ namespace CarRentalManagement.Models
 
         [Key]
         public int BookingID { get; set; }
-
+        public int BookingId { get; internal set; }
 
         [Required]
         public string Username { get => username; internal set => username = value; }
@@ -40,5 +40,7 @@ namespace CarRentalManagement.Models
         public int UserID { get; set; }  // Foreign key
 
         public User? User { get; set; }  // Navigation property
+        public int StartDate { get; internal set; }
+        public int EndDate { get; internal set; }
     }
 }

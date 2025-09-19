@@ -6,21 +6,24 @@
 
 <h2>Create User</h2>
 
-<form asp-controller="Users" asp-action="Create" method="post">
+<form asp-controller="User" asp-action="Create" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+    <!-- First Name -->
     <div class="mb-3">
         <label asp-for="FirstName" class="form-label"></label>
         <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
         <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
 
+    <!-- Last Name -->
     <div class="mb-3">
         <label asp-for="LastName" class="form-label"></label>
         <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
         <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
 
+    <!-- Nationality -->
     <div class="mb-3">
         <label asp-for="Nationality" class="form-label"></label>
         <input asp-for="Nationality" class="form-control" placeholder="Enter nationality" />
@@ -51,39 +54,43 @@
         <span asp-validation-for="PassportNumber" class="text-danger"></span>
     </div>
 
+    <!-- Username -->
     <div class="mb-3">
         <label asp-for="Username" class="form-label"></label>
         <input asp-for="Username" class="form-control" placeholder="Choose a username" />
         <span asp-validation-for="Username" class="text-danger"></span>
     </div>
 
+    <!-- Password -->
     <div class="mb-3">
         <label asp-for="Password" class="form-label"></label>
         <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
 
+    <!-- Email -->
     <div class="mb-3">
         <label asp-for="Email" class="form-label"></label>
         <input asp-for="Email" type="email" class="form-control" placeholder="Enter email" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
+    <!-- Phone -->
     <div class="mb-3">
         <label asp-for="Phone" class="form-label"></label>
         <input asp-for="Phone" class="form-control" placeholder="Enter phone number" />
         <span asp-validation-for="Phone" class="text-danger"></span>
     </div>
 
-    <!-- Role (default Customer, readonly) -->
+    <!-- Role (readonly) -->
     <div class="mb-3">
         <label asp-for="Role" class="form-label"></label>
         <input asp-for="Role" class="form-control" value="Customer" readonly />
     </div>
+
+    <!-- Submit Button -->
     <div class="mb-3">
-        <a asp-controller="Account" asp-action="Login" class="btn btn-warning w-100 text-white">
-            Create 
-        </a>
+        <button type="submit" class="btn btn-warning w-100 text-white">Register</button>
     </div>
 </form>
 
