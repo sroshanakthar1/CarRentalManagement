@@ -20,27 +20,58 @@
     }
 
     .hero {
-        text-align: center;
-        padding: 6% 5%;
-        border-radius: 20px;
-        margin-bottom: 5%;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
         position: relative;
-        overflow: hidden;
+        height: 100vh;
+        background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('/Images/Homepage/1.jpg');
         background-size: cover;
         background-position: center;
-        height: 500px; /* Adjust as needed */
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
         transition: background-image 1s ease-in-out;
-        /* Initial background image so text/buttons show immediately */
-        background-image: url('/Images/Homepage/1.jpg');
     }
+
     .hero-content {
-        position: relative;
         z-index: 2;
-        top: 50%;
-        transform: translateY(-50%);
-        /* color: #111; */ /* Remove this line to not force dark text/buttons */
     }
+
+        .hero-content h1,
+        .hero-content p,
+        .hero-content label {
+            color: #fff;
+        }
+
+    .form-label {
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border: none;
+        color: #000;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            color: #fff;
+        }
+
+    .btn-outline-light:hover {
+        background-color: #fff;
+        color: #000;
+    }
+
+    .form-control-lg {
+        font-size: 1rem;
+    }
+
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.75rem 1.25rem;
+    }
+
     /* Buttons */
     .btn-primary {
         background: #000;
@@ -129,23 +160,38 @@
 
 <!-- Hero Section -->
 <!-- Hero Section -->
-<section class="hero">
-    <div class="hero-content">
-        <h1>Only 3 Steps Rent</h1>
-        <p>Drive Your Dreams</p>
-        <a class="btn btn-motoflex btn-lg" asp-controller="Bookings" asp-action="Create">
-            <i class="bi bi-plus-circle me-1"></i> Book a Car
-        </a>
+<section class="hero text-white text-center d-flex align-items-center">
+    <div class="container hero-content">
+        <h1 class="display-4 fw-bold">Only 3 Steps Rent</h1>
+        <p class="lead">Drive Your Dreams</p>
+
+        <form asp-controller="Home" asp-action="SearchAvailable" method="get" class="row g-3 justify-content-center mt-4">
+            <div class="col-md-3">
+                <label for="pickupDate" class="form-label">Pickup Date</label>
+                <input type="date" id="pickupDate" name="pickupDate" class="form-control form-control-lg" required />
+            </div>
+            <div class="col-md-3">
+                <label for="dropoffDate" class="form-label">Drop-off Date</label>
+                <input type="date" id="dropoffDate" name="dropoffDate" class="form-control form-control-lg" required />
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-warning w-100 btn-lg">Search</button>
+            </div>
+        </form>
     </div>
 </section>
+
 
 
 <script>
     const hero = document.querySelector('.hero');
     const images = [
-        '/Images/Homepage/1.jpg',
-        '/Images/Homepage/2.jpg',
-        '/Images/Homepage/3.jpg'
+        'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg',
+        'https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg',
+        'https://images.pexels.com/photos/244206/pexels-photo-244206.jpeg',
+        'https://images.pexels.com/photos/119435/pexels-photo-119435.jpeg',
+        'https://images.pexels.com/photos/3311574/pexels-photo-3311574.jpeg'
+
     ];
     let current = 0;
 
