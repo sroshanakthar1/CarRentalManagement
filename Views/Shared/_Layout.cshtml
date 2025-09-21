@@ -1,9 +1,8 @@
-﻿zz@using Microsoft.AspNetCore.Http
-@inject IHttpContextAccessor HttpContextAccessor
+﻿@inject IHttpContextAccessor HttpContextAccessor
 
 @{
-    var role = HttpContextAccessor.HttpContext.Session.GetString("Role");
-    var username = HttpContextAccessor.HttpContext.Session.GetString("Username");
+    var username = Context.Session.GetString("Username"); 
+    var role = Context.Session.GetString("Role");
 }
 
 
@@ -39,9 +38,11 @@
                 border-radius: 6px;
             }
 
-        /* Hero Section */
         .hero {
-            background: url('/images/hero-car.jpg') center/cover no-repeat;
+            background-image: url('/images/hero-car.jpg');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
             height: 60vh;
             display: flex;
             align-items: center;
@@ -115,22 +116,25 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
         <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
+                    aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="nav">
+
                 <!-- Left Nav -->
-                <ul class="navbar-nav mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto">
+                    <!-- Home is always visible -->
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">
                             <i class="bi bi-house-door me-1"></i> Home
                         </a>
                     </li>
 
+                    @* Admin-specific links *@
                     @if (role == "Admin")
                     {
                         <li class="nav-item">
@@ -143,9 +147,15 @@
                                 <i class="bi bi-calendar-check me-1"></i> All Bookings
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="User" asp-action="Index">
+                                <i class="bi bi-people me-1"></i> Customers History
+                            </a>
+                        </li>
                     }
 
-                    @if (role == "Customer")
+                    @* Customer-specific links *@
+                    else if (role == "Customer")
                     {
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Bookings" asp-action="Create">
@@ -157,6 +167,11 @@
                                 <i class="bi bi-clock-history me-1"></i> My Bookings
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="AIAssisitant" asp-action="Index">
+                                <i class="bi bi-robot me-1"></i> FreeAI
+                            </a>
+                        </li>
                     }
                 </ul>
 
@@ -164,40 +179,43 @@
                 <ul class="navbar-nav ms-auto">
                     @if (!string.IsNullOrEmpty(username))
                     {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle me-2"></i> @username
+                        <!-- My Profile -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="CustomerProfile" asp-action="ViewProfile">
+                                <i class="bi bi-person-lines-fill me-1"></i> My Profile
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                <li>
-                                    <a class="dropdown-item" asp-controller="CustomerProfile" asp-action="ViewProfile">
-                                        <i class="bi bi-person-lines-fill"></i> My Profile
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">
-                                        <i class="bi bi-box-arrow-right"></i> Logout
-                                    </a>
-                                </li>
-                            </ul>
+                        </li>
+
+                        <!-- Show Settings only for Customers -->
+                        @if (role == "Customer")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="CustomerProfile" asp-action="Settings">
+                                    <i class="bi bi-gear-fill me-1"></i> Settings
+                                </a>
+                            </li>
+                        }
+
+                        <!-- Logout -->
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" asp-controller="Account" asp-action="Logout">
+                                <i class="bi bi-box-arrow-right me-1"></i> Logout
+                            </a>
                         </li>
                     }
                     else
                     {
-                        @if (string.IsNullOrEmpty(role) || role == "Customer")
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Login">
-                                    <i class="bi bi-box-arrow-in-right me-1"></i> Login
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Register">
-                                    <i class="bi bi-pencil-square me-1"></i> Register
-                                </a>
-                            </li>
-                        }
+                        <!-- Login & Register -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="User" asp-action="Login">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="User" asp-action="Create">
+                                <i class="bi bi-pencil-square me-1"></i> Register
+                            </a>
+                        </li>
                     }
                 </ul>
             </div>
@@ -221,9 +239,11 @@
     </main>
 
 
-  
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+          

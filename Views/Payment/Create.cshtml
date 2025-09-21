@@ -1,0 +1,47 @@
+﻿<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-success text-white text-center">
+                    <h4>Payment Confirmation</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Booking Summary -->
+                    <div class="mb-4">
+                        <p><strong>Username:</strong> @Model.Username</p>
+                        <p><strong>Car:</strong> @Model.CarName (@Model.CarModel)</p>
+                        <p><strong>Pickup:</strong> @Model.PickupDate.ToShortDateString()</p>
+                        <p><strong>Return:</strong> @Model.ReturnDate.ToShortDateString()</p>
+                        <p class="text-warning fw-bold">Total Payment: @Model.TotalCost.ToString("C")</p>
+                    </div>
+
+                    <!-- Card Details Form -->
+                    <form method="post" asp-action="ConfirmPayment">
+                        <div class="mb-3">
+                            <label for="CardHolderName" class="form-label">Cardholder Name</label>
+                            <input type="text" id="CardHolderName" name="CardHolderName" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="CardNumber" class="form-label">Card Number</label>
+                            <input type="text" id="CardNumber" name="CardNumber" class="form-control" maxlength="16" required />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="ExpiryDate" class="form-label">Expiry Date</label>
+                                <input type="month" id="ExpiryDate" name="ExpiryDate" class="form-control" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="CVV" class="form-label">CVV</label>
+                                <input type="text" id="CVV" name="CVV" class="form-control" maxlength="4" required />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">Confirm Payment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarRentalManagement.Models
 {
@@ -27,8 +28,9 @@ namespace CarRentalManagement.Models
         public int SeatingCapacity { get; set; } 
 
         [DataType(DataType.Currency)]
-     
-        public decimal PricePerDay { get; set; } 
+
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal PricePerDay { get; set; }
 
         public bool IsAvailable { get; set; } = true;
 
