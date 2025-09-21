@@ -161,8 +161,6 @@
     setInterval(changeHeroImage, 5000);
 </script>
 
-
-
     <h2 class="mb-4">Available Cars</h2>
     <div class="row g-4">
         @foreach (var car in Model)
@@ -175,7 +173,7 @@
                          class="card-img-top"
                          alt="@car.CarName"
                          style="height:200px; object-fit:cover;"
-                         onerror="this.src='/images/car/default.png'" />
+                         onerror="this.src='/images/cars/default.png'" />
 
                     <!-- Card Body -->
                     <div class="card-body">
