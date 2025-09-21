@@ -14,12 +14,11 @@ namespace CarRentalManagement.Controllers
             _db = db;
         }
 
-        // Show Payment Page
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
-
         }
+
     }
 
 }

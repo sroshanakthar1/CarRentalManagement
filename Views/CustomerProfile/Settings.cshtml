@@ -1,0 +1,35 @@
+﻿@model CarRentalManagement.Models.User
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<h3>Settings</h3>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">@ViewBag.Message</div>
+}
+
+<form asp-action="Settings" method="post">
+    <div class="mb-3">
+        <label>First Name</label>
+        <input type="text" name="FirstName" class="form-control" value="@Model.FirstName" />
+    </div>
+    <div class="mb-3">
+        <label>Last Name</label>
+        <input type="text" name="LastName" class="form-control" value="@Model.LastName" />
+    </div>
+    <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="Email" class="form-control" value="@Model.Email" />
+    </div>
+    <div class="mb-3">
+        <label>Phone</label>
+        <input type="text" name="Phone" class="form-control" value="@Model.Phone" />
+    </div>
+    <div class="mb-3">
+        <label>Change Password</label>
+        <input type="password" name="Password" class="form-control" placeholder="Leave blank to keep current password" />
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

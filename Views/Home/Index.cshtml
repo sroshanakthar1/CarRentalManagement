@@ -11,51 +11,36 @@
 
 <style>
     body {
+        margin: 0; /* Removes default margin */
+        padding: 0; /* Removes default padding */
         font-family: "Poppins", sans-serif;
         background: linear-gradient(135deg, #f5f5f5, #eaeaea);
         min-height: 100vh;
         overflow-x: hidden;
     }
 
-    /* Hero Section */
     .hero {
         text-align: center;
         padding: 6% 5%;
-        background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
-        color: #f5c518;
         border-radius: 20px;
         margin-bottom: 5%;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
         position: relative;
         overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        height: 500px; /* Adjust as needed */
+        transition: background-image 1s ease-in-out;
+        /* Initial background image so text/buttons show immediately */
+        background-image: url('/Images/Homepage/hero1.jpeg');
     }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.02);
-            pointer-events: none;
-        }
-
-        .hero h1 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
-            color: #f5c518;
-            z-index: 2;
-            position: relative;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
-            margin-bottom: 20px;
-            color: #e0e0e0;
-        }
-
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        top: 50%;
+        transform: translateY(-50%);
+        /* color: #111; */ /* Remove this line to not force dark text/buttons */
+    }
     /* Buttons */
     .btn-primary {
         background: #000;
@@ -143,37 +128,38 @@
 </style>
 
 <!-- Hero Section -->
+<!-- Hero Section -->
 <section class="hero">
-    <h1>Drive Your Dreams</h1>
-    <p>Only 3 Steps For a Rent</p>
-    <a class="btn btn-primary btn-lg" asp-controller="Bookings" asp-action="Create">
-        <i class="bi bi-plus-circle me-1"></i> Book a Car
-    </a>
+    <div class="hero-content">
+        <h1>Only 3 Steps Rent</h1>
+        <p>Drive Your Dreams</p>
+        <a class="btn btn-motoflex btn-lg" asp-controller="Bookings" asp-action="Create">
+            <i class="bi bi-plus-circle me-1"></i> Book a Car
+        </a>
+    </div>
 </section>
 
-<div class="container py-5">
-    <div class="text-center mb-5">
-        <h1 class="fw-bold" style="font-size:clamp(1.5rem,4vw,2.5rem); color:#111;">
-            Welcome to <span style="color:#f5c518;">MotoFlex</span>
-        </h1>
-        <p class="text-muted" style="font-size:clamp(1rem,2.5vw,1.2rem);">Rent your dream car with style and security</p>
 
-        
-    </div>
+<script>
+    const hero = document.querySelector('.hero');
+    const images = [
+        '/Images/Homepage/hero01.jpeg',
+        '/Images/Homepage/hero2.jpeg',
+        '/Images/Homepage/hero04.jpeg'
+    ];
+    let current = 0;
 
-    <form asp-controller="Home" asp-action="SearchAvailable" method="get" class="row g-3 justify-content-center">
-        <div class="col-md-3">
-            <label for="pickupDate" class="form-label">Pickup Date</label>
-            <input type="date" id="pickupDate" name="pickupDate" class="form-control" required />
-        </div>
-        <div class="col-md-3">
-            <label for="dropoffDate" class="form-label">Drop-off Date</label>
-            <input type="date" id="dropoffDate" name="dropoffDate" class="form-control" required />
-        </div>
-        <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">Search</button>
-        </div>
-    </form>
+    function changeHeroImage() {
+        current = (current + 1) % images.length;
+        hero.style.backgroundImage = `url('${images[current]}')`;
+    }
+
+    // Initial image
+    hero.style.backgroundImage = `url('${images[0]}')`;
+
+    // Change every 5 seconds
+    setInterval(changeHeroImage, 5000);
+</script>
 
 
 
@@ -182,112 +168,147 @@
         @foreach (var car in Model)
         {
             <div class="col-sm-6 col-md-4">
-                <div class="card shadow-lg">
+                <div class="card shadow-lg" style="width: 18rem; margin:auto;">
+
+                    <!-- Car Image -->
                     <img src="@car.ImageUrl"
+                         class="card-img-top"
                          alt="@car.CarName"
-                         style="width:300px; height:200px; object-fit:cover; margin:auto; border-radius:8px;"
+                         style="height:200px; object-fit:cover;"
                          onerror="this.src='/images/car/default.png'" />
 
+                    <!-- Card Body -->
                     <div class="card-body">
                         <h5 class="card-title">@car.CarName (@car.CarModel)</h5>
-                        <ul class="list-unstyled">
-                            <li>Transmission: @car.Transmission</li>
-                            <li>Seats: @car.SeatingCapacity</li>
-                            <li>Fuel: @car.FuelType</li>
-                        </ul>
-                        <p class="fw-bold text-warning">Price/Day: @car.PricePerDay.ToString("C")</p>
+
+                        <p class="card-text mb-2">
+                            
+                            <strong>Seats:</strong> @car.SeatingCapacity <br />
+                      
+                        </p>
+
+                        <p class="fw-bold text-warning mb-2">
+                            Price/Day: @car.PricePerDay.ToString("C")
+                        </p>
+
                         @if (car.IsAvailable)
                         {
-                            <span class="badge bg-success">Available</span>
+                            <span class="badge bg-success mb-3">Available</span>
                         }
                         else
                         {
-                            <span class="badge bg-danger">Booked</span>
+                            <span class="badge bg-danger mb-3">Booked</span>
                         }
-                    </div>
-
-
-                    <div class="card-footer d-flex justify-content-between">
-                        <a asp-controller="CustomerProfile" asp-action="Details" asp-route-id="@car.CarID"
-                           class="btn btn-motoflex">View</a>
-
+                        <div class="d-flex justify-content-between">
+                        <a asp-controller="CustomerProfile"
+                           asp-action="Details"
+                           asp-route-id="@car.CarID"
+                           class="btn btn-primary">
+                            View
+                        </a>
                         <a asp-controller="Bookings"
                            asp-action="Create"
                            asp-route-carId="@car.CarID"
                            asp-route-pickupDate="@DateTime.Today.ToString("yyyy-MM-dd")"
                            asp-route-returnDate="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")"
-                           class="btn btn-motoflex">
+                           class="btn btn-primary">
                             Book Now
                         </a>
+                        </div>
                     </div>
                 </div>
             </div>
         }
     </div>
-    </div>
 
+<footer class="footer py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Company Info -->
+            <div class="col-md-4 text-center text-md-start">
+                <h4 class="fw-bold mb-1">MotoFlex</h4>
+                <p class="mb-0">Your trusted partner for premium car rentals</p>
+                <p class="mb-0">📧 contact@motoflex.com | 📞 +94 77 123 4567</p>
+            </div>
 
-<footer class="footer mt-5 py-5" style="background:#111; color:#f5c518; border-top:3px solid #f5c518;">
-    <div class="container text-center">
-        <!-- Company Info -->
-        <h4 class="fw-bold">MotoFlex</h4>
-        <p class="mb-1">Your trusted partner for premium car rentals</p>
-        <p class="mb-3">📧 contact@motoflex.com | 📞 +94 77 123 4567</p>
+            <!-- Navigation Links -->
+            <div class="col-md-4 text-center my-2 my-md-0">
+                <a asp-controller="Home" asp-action="Index" class="footer-link">Home</a> |
+                <a asp-controller="Home" asp-action="Privacy" class="footer-link">Privacy Policy</a> |
+                <a asp-controller="Home" asp-action="Terms" class="footer-link">Terms & Conditions</a>
+            </div>
 
-        <!-- Navigation Links -->
-        <div class="mb-3">
-            <a asp-controller="Home" asp-action="Index" class="footer-link">Home</a> |
-            <a asp-controller="Home" asp-action="Privacy" class="footer-link">Privacy Policy</a> |
-            <a asp-controller="Home" asp-action="Terms" class="footer-link">Terms & Conditions</a>
+            <!-- Social Icons & Payment -->
+            <div class="col-md-4 text-center text-md-end">
+                <!-- Social -->
+                <a href="https://www.facebook.com" target="_blank" class="social-link me-2">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a href="https://www.youtube.com" target="_blank" class="social-link me-2">
+                    <i class="bi bi-youtube"></i>
+                </a>
+                <a href="https://www.instagram.com" target="_blank" class="social-link me-2">
+                    <i class="bi bi-instagram"></i>
+                </a>
+
+                <!-- Payment -->
+                <img src="/Images/payments/download.png" alt="Visa" class="mx-2" />
+            </div>
         </div>
 
-        <!-- Social Icons -->
-        <div class="mb-3">
-            <a href="https://www.facebook.com" target="_blank" class="social-link me-3">
-                <i class="bi bi-facebook"></i>
-            </a>
-            <a href="https://www.youtube.com" target="_blank" class="social-link me-3">
-                <i class="bi bi-youtube"></i>
-            </a>
-            <a href="https://www.instagram.com" target="_blank" class="social-link">
-                <i class="bi bi-instagram"></i>
-            </a>
+        <!-- Bottom Row: Copyright -->
+        <div class="row mt-3">
+            <div class="col text-center">
+                <p class="mb-0" style="font-size:0.9rem; color:#aaa;">
+                    © @DateTime.Now.Year MotoFlex. All rights reserved.
+                </p>
+            </div>
         </div>
-
-        <!-- Payment Methods -->
-        <div class="mb-3">
-            <img src="/Images/payments/download.png" alt="Visa" class="mx-2" />
-        </div>
-
-        <p class="mt-3 mb-0" style="font-size:0.9rem; color:#aaa;">
-            © @DateTime.Now.Year MotoFlex. All rights reserved.
-        </p>
     </div>
 </footer>
 
+
+
+
 <style>
-    /* Custom Buttons */
-    .btn-motoflex {
-        background: #000;
-        border: 2px solid #f5c518;
-        border-radius: 10px;
-        padding: 10px 20px;
-        font-weight: 600;
+    .footer {
+        background: #111;
         color: #f5c518;
-        transition: all 0.3s ease-in-out;
-        text-align: center;
+        border-top: 3px solid #f5c518;
+        margin-top: 0 !important; /* Remove gap above footer */
     }
 
-        .btn-motoflex:hover {
-            background: #f5c518;
-            color: #000;
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    .footer-link {
+        color: #f5c518;
+        text-decoration: none;
+        margin: 0 5px;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+        .footer-link:hover {
+            color: #fff;
         }
 
-    .card-footer .btn {
-        flex: 1;
-        margin: 0 3px;
+    .social-link {
+        color: #f5c518;
+        font-size: 1.3rem;
+        transition: color 0.3s;
     }
+
+        .social-link:hover {
+            color: #fff;
+        }
+
+    .footer img {
+        height: 30px;
+        filter: grayscale(20%);
+        transition: transform 0.3s;
+    }
+
+        .footer img:hover {
+            transform: scale(1.1);
+        }
+
 </style>
 

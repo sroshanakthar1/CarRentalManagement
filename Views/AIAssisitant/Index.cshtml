@@ -1,0 +1,143 @@
+﻿@{
+    ViewData["Title"] = "AI Assistant";
+}
+
+<!-- Page-specific styles -->
+<style>
+    body {
+        background-color: #000;
+        color: #f5c518;
+    }
+
+    .ai-assistant-container {
+        background-color: #111;
+        padding: 30px;
+        border-radius: 15px;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #111;
+        border-radius: 15px;
+        border: none;
+    }
+
+    #chatBody {
+        height: 300px;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+    .btn-primary {
+        background-color: #f5c518;
+        border-color: #f5c518;
+        color: #000;
+        font-weight: 600;
+        border-radius: 12px;
+    }
+
+        .btn-primary:hover {
+            background-color: #fff200;
+            color: #000;
+        }
+
+    footer {
+        background-color: #111;
+        color: #f5c518;
+        border-top: 3px solid #f5c518;
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    .footer-link {
+        color: #f5c518;
+        text-decoration: none;
+        margin: 0 5px;
+    }
+
+        .footer-link:hover {
+            color: #fff;
+        }
+</style>
+
+<div class="container ai-assistant-container">
+    <h1 class="fw-bold text-warning text-center">Free To Be With Us</h1>
+    <h6 class="mb-5 text-center">Create a personalised travel plan for your Sri Lanka adventure in seconds</h6>
+
+    <!-- Chat Card -->
+    <div class="card shadow mb-4">
+        <div class="card-body" id="chatBody">
+            <div class="text-warning small mb-2">Assistant: Hello 👋, how can I help you today?</div>
+        </div>
+        <div class="card-footer">
+            <div class="input-group">
+                <input id="chatInput" type="text" class="form-control" placeholder="Type a message..." style="border-radius:12px;">
+                <button class="btn btn-primary fw-bold" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Suggestion Buttons -->
+    <h2 class="text-center mb-3">Here To Start</h2>
+    <h5 class="text-center mb-4" style="color:#f5c518; font-weight:500;">Try One of These Requests</h5>
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
+        <button class="btn btn-primary" onclick="insertQuickText(this)">Create a 7-day cultural tour of Sri Lanka</button>
+        <button class="btn btn-primary" onclick="insertQuickText(this)">Plan a beach getaway in Sri Lanka for 5 days</button>
+        <button class="btn btn-primary" onclick="insertQuickText(this)">Design an adventure trip to Sri Lanka's mountains</button>
+        <button class="btn btn-primary" onclick="insertQuickText(this)">Make a 10-day wildlife exploration itinerary</button>
+        <button class="btn btn-primary" onclick="insertQuickText(this)">Plan a foodie tour of Sri Lanka for 4 days</button>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="mt-auto text-center">
+    <h4 class="fw-bold">MotoFlex</h4>
+    <p class="mb-1">Your trusted partner for premium car rentals</p>
+    <p class="mb-3">📧 contact@motoflex.com | 📞 +94 77 123 4567</p>
+    <div class="mb-3">
+        <a asp-controller="Home" asp-action="Index" class="footer-link">Home</a> |
+        <a asp-controller="Home" asp-action="Privacy" class="footer-link">Privacy Policy</a> |
+        <a asp-controller="Home" asp-action="Terms" class="footer-link">Terms & Conditions</a>
+    </div>
+    <div class="text-center mt-3">&copy; 2025 MotoFlex. All rights reserved.</div>
+</footer>
+
+<!-- Chat JavaScript -->
+<script>
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const chatBody = document.getElementById('chatBody');
+        const message = input.value.trim();
+        if (!message) return;
+
+        // Append user message
+        const userDiv = document.createElement('div');
+        userDiv.classList.add('text-light', 'small', 'mb-2');
+        userDiv.innerHTML = `<strong>You:</strong> ${message}`;
+        chatBody.appendChild(userDiv);
+
+        // Clear input
+        input.value = '';
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        // Simulated AI response
+        setTimeout(() => {
+            const aiDiv = document.createElement('div');
+            aiDiv.classList.add('text-warning', 'small', 'mb-2');
+            aiDiv.innerHTML = `<strong>Assistant:</strong> Sorry, I am not connected to AI yet. You typed: "${message}"`;
+            chatBody.appendChild(aiDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }, 800);
+    }
+
+    function insertQuickText(btn) {
+        const input = document.getElementById('chatInput');
+        input.value = btn.innerText;
+        input.focus();
+    }
+
+    // Allow pressing Enter to send
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendMessage();
+    });
+</script>

@@ -24,6 +24,7 @@
             <th>Username</th>
             <th>Password</th>
             <th>Role</th>
+            <th>Actions</th> <!-- ✅ -->
         </tr>
     </thead>
     <tbody>
@@ -41,6 +42,11 @@
                 <td>@user.Username</td>
                 <td>••••••••</td>
                 <td>@user.Role</td>
+                <td>
+                    <!-- ✅ Action Buttons -->
+                    <a asp-action="Details" asp-route-id="@user.UserID" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Delete" asp-route-id="@user.UserID" class="btn btn-danger btn-sm">Delete</a>
+                </td>
             </tr>
         }
     </tbody>

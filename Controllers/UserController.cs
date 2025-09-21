@@ -81,12 +81,55 @@ namespace CarRentalManagement.Controllers
             TempData["Success"] = $"🎉 Registration successful! Please login with username: {user.Username}";
             return RedirectToAction("Login");
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserID == id);
+            if (user == null)
+                return NotFound();
+
+            return View(user); // opens Details.cshtml
+        }
+
+        // ---------------- DELETE ----------------
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserID == id);
+            if (user == null)
+                return NotFound();
+
+            return View(user); // opens Delete.cshtml
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var user = await _db.Users.FindAsync(id);
+            if (user == null)
+                return NotFound();
+
+            try
+            {
+                _db.Users.Remove(user);
+                await _db.SaveChangesAsync();
+                TempData["Success"] = "🗑️ User deleted successfully!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error deleting user: {ex.Message}");
+                return View(user);
+            }
+        }
     }
 }
 
 
-    
 
 
-        
+
+
+
 

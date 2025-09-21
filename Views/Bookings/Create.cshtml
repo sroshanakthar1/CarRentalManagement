@@ -1,59 +1,74 @@
 ﻿@model CarRentalManagement.ViewModels.BookingViewModel
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+<div class="container py-0">
+    <div class="row justify-content-center g-0">
+        <div class="col-md-10">
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-warning text-white text-center">
-                    <h3>Booking Page</h3>
+                    <h3 class="mb-0">Booking Page</h3>
                 </div>
-                <div class="card-body">
 
-                    <div class="d-flex justify-content-center mb-3">
-                        <img src="@Model.CarImageUrl" class="img-fluid rounded" style="max-height:200px;" />
+                <div class="row g-0">
+                    <!-- Left Side: Car Image -->
+                    <div class="col-md-5">
+                        <img src="@Model.CarImageUrl"
+                             alt="@Model.CarName"
+                             class="img-fluid rounded-start w-100"
+                             style="object-fit: cover; max-height: 400px;"
+                             onerror="this.src='/images/car/default.png'" />
                     </div>
 
-                    <h5 class="card-title text-center">@Model.CarName (@Model.CarModel)</h5>
-                    <p>Transmission: <strong>@Model.Transmission</strong></p>
-                    <p>Seats: <strong>@Model.SeatingCapacity</strong></p>
-                    <p>Fuel: <strong>@Model.FuelType</strong></p>
-                    <p class="fw-bold text-warning">Price/Day: @Model.CarPrice.ToString("C")</p>
+                    <!-- Right Side: Car Details + Booking Form -->
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <h5 class="card-title">@Model.CarName (@Model.CarModel)</h5>
+                            <p>Transmission: <strong>@Model.Transmission</strong></p>
+                            <p>Seats: <strong>@Model.SeatingCapacity</strong></p>
+                            <p>Fuel: <strong>@Model.FuelType</strong></p>
+                            <p class="fw-bold text-warning">
+                                Price/Day: @Model.CarPrice.ToString("C")
+                            </p>
 
-                    @if (!string.IsNullOrEmpty(Model.Error))
-                    {
-                        <div class="alert alert-danger">@Model.Error</div>
-                    }
+                            @if (!string.IsNullOrEmpty(Model.Error))
+                            {
+                                <div class="alert alert-danger">@Model.Error</div>
+                            }
 
-                    <form asp-action="ConfirmBooking" method="post">
-                        <input type="hidden" asp-for="CarID" />
-                        <input type="hidden" asp-for="TotalCost" />
-                        <input type="hidden" asp-for="PickupDate" />
-                        <input type="hidden" asp-for="ReturnDate" />
+                            <form asp-action="ConfirmBooking" method="post">
+                                <input type="hidden" asp-for="CarID" />
+                                <input type="hidden" asp-for="TotalCost" />
 
-                        <div class="mb-3">
-                            <label for="pickupDate" class="form-label">Pickup Date</label>
-                            <input type="date" id="pickupDate" name="PickupDate" class="form-control"
-                                   value="@Model.PickupDate.ToString("yyyy-MM-dd")" required />
+                                <div class="mb-3">
+                                    <label for="pickupDate" class="form-label">Pickup Date</label>
+                                    <input type="date" id="pickupDate" name="PickupDate"
+                                           class="form-control"
+                                           value="@Model.PickupDate.ToString("yyyy-MM-dd")"
+                                           required />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="returnDate" class="form-label">Return Date</label>
+                                    <input type="date" id="returnDate" name="ReturnDate"
+                                           class="form-control"
+                                           value="@Model.ReturnDate.ToString("yyyy-MM-dd")"
+                                           required />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="totalCostDisplay" class="form-label">Total Cost</label>
+                                    <input type="text" id="totalCostDisplay"
+                                           value="@Model.TotalCost.ToString("F2")"
+                                           class="form-control text-success fw-bold" readonly />
+                                </div>
+
+                                <a asp-controller="User" asp-action="Login"
+                                   class="btn btn-primary  w-100 text-white">
+                                    Payment Process
+                                </a>
+                            </form>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="returnDate" class="form-label">Return Date</label>
-                            <input type="date" id="returnDate" name="ReturnDate" class="form-control"
-                                   value="@Model.ReturnDate.ToString("yyyy-MM-dd")" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="totalCostDisplay" class="form-label">Total Cost</label>
-                            <input type="text" id="totalCostDisplay" value="@Model.TotalCost.ToString("F2")"
-                                   class="form-control text-success fw-bold" readonly />
-                        </div>
-                        <a asp-controller="User" asp-action="Login" class="btn btn-warning w-100 text-white">
-                            PaymentProcess
-                        </a>
-
-                    </form>
-                       
-                </div>
+                    </div>
+                </div> <!-- row -->
             </div>
         </div>
     </div>
@@ -81,4 +96,3 @@
         calculateTotalCost();
     </script>
 }
-
