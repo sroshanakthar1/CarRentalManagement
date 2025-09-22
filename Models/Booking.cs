@@ -10,7 +10,6 @@ namespace CarRentalManagement.Models
 
         [Key]
         public int BookingID { get; set; }
-        public int BookingId { get; internal set; }
 
         [Required]
         public string Username { get => username; internal set => username = value; }
