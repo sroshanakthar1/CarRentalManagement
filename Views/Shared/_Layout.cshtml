@@ -115,7 +115,6 @@
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
-
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
         <div class="container">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
@@ -133,6 +132,17 @@
                             <i class="bi bi-house-door me-1"></i> Home
                         </a>
                     </li>
+
+
+                @{
+                var carId = Context.Session.GetInt32("CarId");
+                var pickupDate = Context.Session.GetString("PickupDate");
+                var returnDate = Context.Session.GetString("ReturnDate");
+
+
+                
+                }
+               
 
                     @* Admin-specific links *@
                     @if (role == "Admin")
@@ -157,16 +167,38 @@
                     @* Customer-specific links *@
                     else if (role == "Customer")
                     {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Payment" asp-action="Create">
-                                <i class="bi bi-plus-circle me-1"></i> Book a Car
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Bookings" asp-action="MyBookings">
-                                <i class="bi bi-clock-history me-1"></i> My Bookings
-                            </a>
-                        </li>
+                        
+
+                        @if (carId != null && !string.IsNullOrEmpty(pickupDate) && !string.IsNullOrEmpty(returnDate))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Bookings"
+                                   asp-action="Create"
+                                   asp-route-carId="@carId"
+                                   asp-route-pickupDate="@pickupDate"
+                                   asp-route-returnDate="@returnDate">
+                                   Booking Page
+                                </a>
+                            </li>
+                        }
+
+                       
+                        @if (carId != null && !string.IsNullOrEmpty(pickupDate) && !string.IsNullOrEmpty(returnDate))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Payment"
+                                   asp-action="Create"
+                                   asp-route-carId="@carId"
+                                   asp-route-pickupDate="@pickupDate"
+                                   asp-route-returnDate="@returnDate">
+                                    Payment Page
+                                </a>
+                            </li>
+                        }
+
+
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="AIAssisitant" asp-action="Index">
                                 <i class="bi bi-robot me-1"></i> FreeAI
@@ -179,10 +211,11 @@
                 <ul class="navbar-nav ms-auto">
                     @if (!string.IsNullOrEmpty(username))
                     {
-                        <!-- My Profile -->
+                        <!-- My Profile with username -->
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="CustomerProfile" asp-action="ViewProfile">
-                                <i class="bi bi-person-lines-fill me-1"></i> My Profile
+                                <i class="bi bi-person-lines-fill me-1"></i>
+                                <span class="fw-bold text-info">@username</span>
                             </a>
                         </li>
 
@@ -207,7 +240,7 @@
                     {
                         <!-- Login & Register -->
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="User" asp-action="Login">
+                            <a class="nav-link" asp-controller="CustomerProfile" asp-action="Login">
                                 <i class="bi bi-box-arrow-in-right me-1"></i> Login
                             </a>
                         </li>

@@ -17,14 +17,27 @@ namespace CarRentalManagement.Controllers
         }
 
 
+        // GET: /User/Login
         [HttpGet]
-        public IActionResult Login(int? carId,DateTime? pickupDate, DateTime? returnDate,string? error = null)
+        public IActionResult Login(int? carId, DateTime? pickupDate, DateTime? returnDate, string? error = null)
         {
+            // Already logged in → redirect to Payment/Create
+            var username = HttpContext.Session.GetString("Username");
+            if (!string.IsNullOrEmpty(username) && carId.HasValue && pickupDate.HasValue && returnDate.HasValue)
+            {
+                return RedirectToAction("Create", "Payment", new
+                {
+                    carId,
+                    pickupDate = pickupDate?.ToString("yyyy-MM-dd"),
+                    returnDate = returnDate?.ToString("yyyy-MM-dd")
+                });
+            }
+
             ViewBag.Error = error;
             ViewBag.CarId = carId;
             ViewBag.PickupDate = pickupDate;
             ViewBag.ReturnDate = returnDate;
-            
+
             return View();
         }
 
