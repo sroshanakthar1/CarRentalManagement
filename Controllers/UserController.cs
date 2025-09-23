@@ -18,18 +18,18 @@ namespace CarRentalManagement.Controllers
 
 
         [HttpGet]
-        public IActionResult Login(int? carId, DateTime? pickupDate, DateTime? returnDate,Decimal totalcoast, string? error = null)
+        public IActionResult Login(int? carId,DateTime? pickupDate, DateTime? returnDate,string? error = null)
         {
             ViewBag.Error = error;
             ViewBag.CarId = carId;
             ViewBag.PickupDate = pickupDate;
             ViewBag.ReturnDate = returnDate;
-            ViewBag.TotalCoast = totalcoast;
+            
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password, int? carId, DateTime? pickupDate, Decimal totalcoast, DateTime? returnDate)
+        public async Task<IActionResult> Login(string username, string password, int? carId, DateTime? pickupDate,  DateTime? returnDate)
         {
             var user = await _auth.ValidateUserAsync(username, password);
             if (user == null)
@@ -38,7 +38,7 @@ namespace CarRentalManagement.Controllers
                 ViewBag.CarId = carId;
                 ViewBag.PickupDate = pickupDate;
                 ViewBag.ReturnDate = returnDate;
-                ViewBag.TotalCoast = totalcoast;
+              
                 return View();
             }
 
@@ -46,8 +46,7 @@ namespace CarRentalManagement.Controllers
             HttpContext.Session.SetString("Username", user.Username);
             HttpContext.Session.SetString("Role", user.Role);
 
-            // Redirect to Payment with the same car info
-            return RedirectToAction("Index", "Payment", new
+            return RedirectToAction("Create", "Payment", new
             {
                 carId = carId,
                 pickupDate = pickupDate?.ToString("yyyy-MM-dd"),

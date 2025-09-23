@@ -1,0 +1,51 @@
+﻿@model CarRentalManagement.ViewModels.PaymentSuccessViewModel
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm p-4 text-center">
+                <h2 class="text-success mb-4">✅ Payment Successful!</h2>
+
+                <p class="fw-bold">Thank you, @Model.Username</p>
+
+                <div class="mb-3">
+                    <h5>Booking Details</h5>
+                    <p>Booking ID: <strong>@Model.BookingId</strong></p>
+                    <p>Car: <strong>@Model.CarName (@Model.CarModel)</strong></p>
+                    <p>Pickup Date: <strong>@Model.PickupDate.ToShortDateString()</strong></p>
+                    <p>Return Date: <strong>@Model.ReturnDate.ToShortDateString()</strong></p>
+                    <p>Total Paid: <strong>@Model.TotalCost.ToString("C")</strong></p>
+                </div>
+
+                <div class="mb-3">
+                    <h5>Collection Info</h5>
+                    <p>Address: <strong>@Model.CollectionAddress</strong></p>
+                    <p>Contact Number: <strong>@Model.ContactNumber</strong></p>
+                </div>
+
+                <p class="text-muted">Your car will be ready for pickup on the pickup date. Please keep your booking ID safe.</p>
+
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary mt-3">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #121212;
+        color: #fff;
+    }
+
+    .card {
+        background-color: #1a1a1a;
+        color: #fff;
+    }
+
+    .btn-primary {
+        background-color: #f5c518;
+        border-color: #f5c518;
+        color: #1a1a1a;
+        font-weight: bold;
+    }
+</style>

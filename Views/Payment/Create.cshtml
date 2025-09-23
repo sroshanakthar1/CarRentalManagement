@@ -1,0 +1,53 @@
+﻿@using CarRentalManagement.ViewModels
+@model PaymentViewModel
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4">
+                <h3 class="text-center mb-4"> Customer Payment Page</h3>
+
+                <!-- Car Info -->
+                <div class="mb-3">
+                    <p><strong>Car Name:</strong> @Model.CarName (@Model.CarModel)</p>
+                    <p><strong>Pickup Date:</strong> @Model.PickupDate.ToShortDateString()</p>
+                    <p><strong>Return Date:</strong> @Model.ReturnDate.ToShortDateString()</p>
+                    <p class="fw-bold text-success"><strong>Total Cost:</strong> @Model.TotalCost.ToString("C")</p>
+                </div>
+
+                <!-- Payment Form -->
+                <form asp-action="ProcessPayment" method="post">
+                    <input type="hidden" name="CarId" value="@Model.CarId" />
+                    <input type="hidden" name="TotalCost" value="@Model.TotalCost" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Card Number</label>
+                        <input type="text" name="CardNumber" class="form-control" placeholder="1234 5678 8765 4321" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Card Holder Name</label>
+                        <input type="text" name="CardHolderName" class="form-control" placeholder="RTSN" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Expiry Date</label>
+                        <input type="month" name="ExpiryDate" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">CVV</label>
+                        <input type="text" name="CVV" class="form-control" placeholder="123" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Amount</label>
+                        <input type="text" name="Amount" class="form-control" placeholder="4500" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Pay Now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
