@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250918191810_InitialCreate")]
+    [Migration("20250922164519_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace CarRentalManagement.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -33,10 +33,16 @@ namespace CarRentalManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingID"));
 
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("CarID")
                         .HasColumnType("int");
 
                     b.Property<int>("CustomerID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EndDate")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PickupDate")
@@ -45,8 +51,14 @@ namespace CarRentalManagement.Migrations
                     b.Property<DateTime>("ReturnDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("StartDate")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("TotalCost")
                         .HasColumnType("decimal(10,2)");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -57,6 +69,8 @@ namespace CarRentalManagement.Migrations
                     b.HasIndex("CarID");
 
                     b.HasIndex("CustomerID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Bookings");
                 });
@@ -185,9 +199,17 @@ namespace CarRentalManagement.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("CarRentalManagement.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Car");
 
                     b.Navigation("Customer");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CarRentalManagement.Models.Car", b =>

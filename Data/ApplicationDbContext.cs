@@ -1,5 +1,6 @@
 ﻿using CarRentalManagement.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 
 namespace CarRentalManagement.Data
@@ -13,6 +14,7 @@ namespace CarRentalManagement.Data
         public DbSet<Car> Cars => Set<Car>();
         public DbSet<Booking> Bookings => Set<Booking>();
 
+        public DbSet<Payment> Payments => Set<Payment>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

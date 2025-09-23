@@ -1,76 +1,56 @@
 ﻿@model CarRentalManagement.ViewModels.BookingViewModel
 
-<div class="container py-0">
-    <div class="row justify-content-center g-0">
-        <div class="col-md-10">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-warning text-white text-center">
-                    <h3 class="mb-0">Booking Page</h3>
-                </div>
+<div class="row">
+    <div class="col-md-5">
+        <img src="@Model.CarImageUrl"
+             alt="@Model.CarName"
+             class="img-fluid rounded-start w-100"
+             style="object-fit: cover; max-height: 400px;"
+             onerror="this.src='/images/car/default.png'" />
+    </div>
 
-                <div class="row g-0">
-                    <!-- Left Side: Car Image -->
-                    <div class="col-md-5">
-                        <img src="@Model.CarImageUrl"
-                             alt="@Model.CarName"
-                             class="img-fluid rounded-start w-100"
-                             style="object-fit: cover; max-height: 400px;"
-                             onerror="this.src='/images/car/default.png'" />
-                    </div>
+    <div class="col-md-7">
+        <h5>@Model.CarName (@Model.CarModel)</h5>
+        <p>Transmission: <strong>@Model.Transmission</strong></p>
+        <p>Seats: <strong>@Model.SeatingCapacity</strong></p>
+        <p>Fuel: <strong>@Model.FuelType</strong></p>
+        <p class="fw-bold text-warning">Price/Day: @Model.CarPrice.ToString("C")</p>
 
-                    <!-- Right Side: Car Details + Booking Form -->
-                    <div class="col-md-7">
-                        <div class="card-body">
-                            <h5 class="card-title">@Model.CarName (@Model.CarModel)</h5>
-                            <p>Transmission: <strong>@Model.Transmission</strong></p>
-                            <p>Seats: <strong>@Model.SeatingCapacity</strong></p>
-                            <p>Fuel: <strong>@Model.FuelType</strong></p>
-                            <p class="fw-bold text-warning">
-                                Price/Day: @Model.CarPrice.ToString("C")
-                            </p>
+        @if (!string.IsNullOrEmpty(Model.Error))
+        {
+            <div class="alert alert-danger">@Model.Error</div>
+        }
 
-                            @if (!string.IsNullOrEmpty(Model.Error))
-                            {
-                                <div class="alert alert-danger">@Model.Error</div>
-                            }
+        <form asp-action="ConfirmBooking" method="post">
+            <input type="hidden" asp-for="CarID" />
+            <input type="hidden" asp-for="TotalCost" />
 
-                            <form asp-action="ConfirmBooking" method="post">
-                                <input type="hidden" asp-for="CarID" />
-                                <input type="hidden" asp-for="TotalCost" />
-
-                                <div class="mb-3">
-                                    <label for="pickupDate" class="form-label">Pickup Date</label>
-                                    <input type="date" id="pickupDate" name="PickupDate"
-                                           class="form-control"
-                                           value="@Model.PickupDate.ToString("yyyy-MM-dd")"
-                                           required />
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="returnDate" class="form-label">Return Date</label>
-                                    <input type="date" id="returnDate" name="ReturnDate"
-                                           class="form-control"
-                                           value="@Model.ReturnDate.ToString("yyyy-MM-dd")"
-                                           required />
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="totalCostDisplay" class="form-label">Total Cost</label>
-                                    <input type="text" id="totalCostDisplay"
-                                           value="@Model.TotalCost.ToString("F2")"
-                                           class="form-control text-success fw-bold" readonly />
-                                </div>
-
-                                <a asp-controller="User" asp-action="Login"
-                                   class="btn btn-primary  w-100 text-white">
-                                    Payment Process
-                                </a>
-                            </form>
-                        </div>
-                    </div>
-                </div> <!-- row -->
+            <div class="mb-3">
+                <label>Pickup Date</label>
+                <input type="date" asp-for="PickupDate" class="form-control" />
             </div>
-        </div>
+
+            <div class="mb-3">
+                <label>Return Date</label>
+                <input type="date" asp-for="ReturnDate" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label>Total Cost</label>
+                <input type="text" id="totalCostDisplay"
+                       value="@Model.TotalCost.ToString("C")"
+                       class="form-control text-success fw-bold" readonly />
+            </div>
+
+            <a asp-controller="User"
+               asp-action="Login"
+               asp-route-carId="@Model.CarID"
+               asp-route-pickupDate="@Model.PickupDate.ToString("yyyy-MM-dd")"
+               asp-route-returnDate="@Model.ReturnDate.ToString("yyyy-MM-dd")"
+               class="btn btn-success">
+                Proceed to Payment
+            </a>
+        </form>
     </div>
 </div>
 
@@ -79,8 +59,8 @@
         const pricePerDay = @Model.CarPrice;
 
         function calculateTotalCost() {
-            const pickup = new Date(document.getElementById("pickupDate").value);
-            const ret = new Date(document.getElementById("returnDate").value);
+            const pickup = new Date(document.getElementById("PickupDate").value);
+            const ret = new Date(document.getElementById("ReturnDate").value);
             const days = (ret - pickup) / (1000 * 60 * 60 * 24);
 
             if (days > 0) {
@@ -91,8 +71,9 @@
             }
         }
 
-        document.getElementById("pickupDate").addEventListener("change", calculateTotalCost);
-        document.getElementById("returnDate").addEventListener("change", calculateTotalCost);
+        document.getElementById("PickupDate").addEventListener("change", calculateTotalCost);
+        document.getElementById("ReturnDate").addEventListener("change", calculateTotalCost);
         calculateTotalCost();
     </script>
 }
+

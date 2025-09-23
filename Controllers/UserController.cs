@@ -18,20 +18,27 @@ namespace CarRentalManagement.Controllers
 
 
         [HttpGet]
-        public IActionResult Login(string? error = null)
+        public IActionResult Login(int? carId,DateTime? pickupDate, DateTime? returnDate,string? error = null)
         {
             ViewBag.Error = error;
+            ViewBag.CarId = carId;
+            ViewBag.PickupDate = pickupDate;
+            ViewBag.ReturnDate = returnDate;
+            
             return View();
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(string username, string password, int? carId, DateTime? pickupDate,  DateTime? returnDate)
         {
             var user = await _auth.ValidateUserAsync(username, password);
             if (user == null)
             {
-                ViewBag.Error = "❌ Invalid username or password.";
+                ViewBag.Error = "❌ Invalid username or password";
+                ViewBag.CarId = carId;
+                ViewBag.PickupDate = pickupDate;
+                ViewBag.ReturnDate = returnDate;
+              
                 return View();
             }
 
@@ -39,11 +46,13 @@ namespace CarRentalManagement.Controllers
             HttpContext.Session.SetString("Username", user.Username);
             HttpContext.Session.SetString("Role", user.Role);
 
-            TempData["LoginSuccess"] = $"🎉 Welcome {user.Username}, login successful!";
-            return RedirectToAction("Index", "Payment");
+            return RedirectToAction("Create", "Payment", new
+            {
+                carId = carId,
+                pickupDate = pickupDate?.ToString("yyyy-MM-dd"),
+                returnDate = returnDate?.ToString("yyyy-MM-dd")
+            });
         }
-
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {

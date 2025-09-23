@@ -78,7 +78,28 @@ namespace CarRentalManagement.Controllers
             // Redirect to a "Booking Success" page
             return RedirectToAction("Success");
         }
+        public async Task<IActionResult> Create(int carId)
+        {
+            var car = await _db.Cars.FirstOrDefaultAsync(c => c.CarID == carId);
+            if (car == null) return NotFound();
 
+            var model = new BookingViewModel
+            {
+                CarID = car.CarID,
+                CarName = car.CarName,
+                CarModel = car.CarModel,
+                CarImageUrl = car.ImageUrl,
+                Transmission = car.Transmission,
+                SeatingCapacity = car.SeatingCapacity,
+                FuelType = car.FuelType,
+                CarPrice = car.PricePerDay,
+                PickupDate = DateTime.Today,
+                ReturnDate = DateTime.Today.AddDays(1),
+                TotalCost = car.PricePerDay // default 1 day
+            };
+
+            return View(model);
+        }
         // Optional: Booking Success page
         public IActionResult Success()
         {

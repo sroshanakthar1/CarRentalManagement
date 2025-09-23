@@ -10,6 +10,10 @@ namespace CarRentalManagement.Services
         private readonly ApplicationDbContext _db;
         public AuthService(ApplicationDbContext db) => _db = db;
 
+        public object GetCurrentUser()
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<User?> ValidateUserAsync(string username, string password)
         {
