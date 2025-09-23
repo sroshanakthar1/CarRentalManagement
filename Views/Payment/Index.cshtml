@@ -1,3 +1,8 @@
-﻿<h1>
-	You are Fiannly Got Your CArs 
-</h1>
+﻿@using CarRentalManagement.ViewModels
+@model PaymentViewModel
+
+<h2>Payment Page</h2>
+<p>Car ID: @Model.CarId</p>
+<p>Pickup Date: @Model.PickupDate.ToShortDateString()</p>
+<p>Return Date: @Model.ReturnDate.ToShortDateString()</p>
+<p>TotalCost: @Model.TotalCost</p>

@@ -1,6 +1,6 @@
 ﻿namespace CarRentalManagement.Models
 {
-    public class Customers
+    public class Paymnent
     {
     }
 }

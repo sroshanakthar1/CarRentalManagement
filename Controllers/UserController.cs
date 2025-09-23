@@ -18,20 +18,27 @@ namespace CarRentalManagement.Controllers
 
 
         [HttpGet]
-        public IActionResult Login(string? error = null)
+        public IActionResult Login(int? carId, DateTime? pickupDate, DateTime? returnDate,Decimal totalcoast, string? error = null)
         {
             ViewBag.Error = error;
+            ViewBag.CarId = carId;
+            ViewBag.PickupDate = pickupDate;
+            ViewBag.ReturnDate = returnDate;
+            ViewBag.TotalCoast = totalcoast;
             return View();
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(string username, string password, int? carId, DateTime? pickupDate, Decimal totalcoast, DateTime? returnDate)
         {
             var user = await _auth.ValidateUserAsync(username, password);
             if (user == null)
             {
-                ViewBag.Error = "❌ Invalid username or password.";
+                ViewBag.Error = "❌ Invalid username or password";
+                ViewBag.CarId = carId;
+                ViewBag.PickupDate = pickupDate;
+                ViewBag.ReturnDate = returnDate;
+                ViewBag.TotalCoast = totalcoast;
                 return View();
             }
 
@@ -39,11 +46,14 @@ namespace CarRentalManagement.Controllers
             HttpContext.Session.SetString("Username", user.Username);
             HttpContext.Session.SetString("Role", user.Role);
 
-            TempData["LoginSuccess"] = $"🎉 Welcome {user.Username}, login successful!";
-            return RedirectToAction("Index", "Payment");
+            // Redirect to Payment with the same car info
+            return RedirectToAction("Index", "Payment", new
+            {
+                carId = carId,
+                pickupDate = pickupDate?.ToString("yyyy-MM-dd"),
+                returnDate = returnDate?.ToString("yyyy-MM-dd")
+            });
         }
-
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {

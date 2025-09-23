@@ -59,12 +59,16 @@ namespace CarRentalManagement.Migrations
                 {
                     BookingID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CustomerID = table.Column<int>(type: "int", nullable: false),
                     CarID = table.Column<int>(type: "int", nullable: false),
                     PickupDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TotalCost = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<int>(type: "int", nullable: false),
+                    EndDate = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,6 +85,12 @@ namespace CarRentalManagement.Migrations
                         principalTable: "Users",
                         principalColumn: "UserID",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -92,6 +102,11 @@ namespace CarRentalManagement.Migrations
                 name: "IX_Bookings_CustomerID",
                 table: "Bookings",
                 column: "CustomerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_UserID",
+                table: "Bookings",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Username",
