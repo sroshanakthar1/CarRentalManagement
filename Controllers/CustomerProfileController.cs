@@ -1,4 +1,6 @@
 ﻿using CarRentalManagement.Data;
+using CarRentalManagement.Models;
+using CarRentalManagement.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +10,7 @@ namespace CarRentalManagement.Controllers
     public class CustomerProfileController : Controller
     {
         private readonly ApplicationDbContext _db;
-
+        private readonly IAuthService _auth;
         public CustomerProfileController(ApplicationDbContext db)
         {
             _db = db;
@@ -79,5 +81,40 @@ namespace CarRentalManagement.Controllers
             return View(customer);
         }
 
+        [HttpGet]
+        public IActionResult Login(string? error = null)
+        {
+            ViewBag.Error = error;
+            return View();
+        }
+
+        // POST: /Account/Login
+        [HttpPost]
+        public async Task<IActionResult> Login(string username, string password)
+        {
+            var user = await _auth.ValidateUserAsync(username, password);
+            if (user == null)
+            {
+                ViewBag.Error = "❌ Invalid username or password";
+                return View();
+            }
+
+            // Store session
+            HttpContext.Session.SetInt32("UserID", user.UserID);
+            HttpContext.Session.SetString("Username", user.Username);
+            HttpContext.Session.SetString("Role", user.Role);
+            return RedirectToAction("Index", "Home");
+        }
+
+       
+
+        // Logout
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
     }
+
 }
+

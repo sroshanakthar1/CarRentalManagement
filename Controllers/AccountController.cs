@@ -41,28 +41,7 @@ namespace CarRentalManagement.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult Register() => View();
-
-
-        [HttpPost]
-        public async Task<IActionResult> Register(User model)
-        {
-            if (!ModelState.IsValid) return View(model);
-
-
-            var exists = await _db.Users.AnyAsync(u => u.Username == model.Username);
-            if (exists)
-            {
-                ViewBag.Error = "Username already exists";
-                return View(model);
-            }
-            model.Role = string.IsNullOrWhiteSpace(model.Role) ? "Customer" : model.Role;
-            _db.Users.Add(model);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("Login");
-        }
-
+       
 
         public IActionResult Logout()
         {
