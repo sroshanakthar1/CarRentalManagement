@@ -26,6 +26,14 @@ namespace CarRentalManagement.Controllers
 
         public async Task<IActionResult> Create(int carId, DateTime pickupDate, DateTime returnDate)
         {
+            // Save the booking info in Session so navbar button can always use it
+            HttpContext.Session.SetInt32("CarId", carId);
+            HttpContext.Session.SetString("PickupDate", pickupDate.ToString("yyyy-MM-dd"));
+            HttpContext.Session.SetString("ReturnDate", returnDate.ToString("yyyy-MM-dd"));
+
+
+
+
             var car = await _db.Cars.FirstOrDefaultAsync(c => c.CarID == carId);
             if (car == null) return NotFound();
 
