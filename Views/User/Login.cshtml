@@ -40,11 +40,12 @@
                 <button type="submit" class="btn btn-warning text-white fw-bold">Login</button>
             </div>
         </form>
-
-        <p class="text-center mt-3">
-            Don’t have an account?
-            <a asp-controller="User" asp-action="Create">Register here</a>
-        </p>
+        <a asp-controller="User" asp-action="Create"
+           asp-route-carId="@ViewBag.CarId"
+           asp-route-pickupDate="@(((DateTime?)ViewBag.PickupDate)?.ToString("yyyy-MM-dd"))"
+           asp-route-returnDate="@(((DateTime?)ViewBag.ReturnDate)?.ToString("yyyy-MM-dd"))">
+            Register here
+        </a>
     </div>
 </div>
 
@@ -76,6 +77,7 @@
         border-color: #f5c518;
     }
 </style>
+
 
 
 

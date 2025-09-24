@@ -4,24 +4,23 @@ using CarRentalManagement.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace CarRentalManagement.Controllers
 {
     public class UserController : Controller
     {
         private readonly IAuthService _auth;
         private readonly ApplicationDbContext _db;
+
         public UserController(IAuthService auth, ApplicationDbContext db)
         {
-            _auth = auth; _db = db;
+            _auth = auth;
+            _db = db;
         }
 
-
-        // GET: /User/Login
+        // ---------------- LOGIN ----------------
         [HttpGet]
         public IActionResult Login(int? carId, DateTime? pickupDate, DateTime? returnDate, string? error = null)
         {
-            // Already logged in → redirect to Payment/Create
             var username = HttpContext.Session.GetString("Username");
             if (!string.IsNullOrEmpty(username) && carId.HasValue && pickupDate.HasValue && returnDate.HasValue)
             {
@@ -42,75 +41,100 @@ namespace CarRentalManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password, int? carId, DateTime? pickupDate,  DateTime? returnDate)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(string username, string password, int? carId, DateTime? pickupDate, DateTime? returnDate)
         {
-            var user = await _auth.ValidateUserAsync(username, password);
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
             if (user == null)
             {
-                ViewBag.Error = "❌ Invalid username or password";
+                ViewBag.Error = "❌ Invalid username or password.";
                 ViewBag.CarId = carId;
-                ViewBag.PickupDate = pickupDate;
-                ViewBag.ReturnDate = returnDate;
-              
+                ViewBag.PickupDate = pickupDate?.ToString("yyyy-MM-dd");
+                ViewBag.ReturnDate = returnDate?.ToString("yyyy-MM-dd");
                 return View();
             }
 
-            HttpContext.Session.SetInt32("UserID", user.UserID);
             HttpContext.Session.SetString("Username", user.Username);
             HttpContext.Session.SetString("Role", user.Role);
 
-            return RedirectToAction("Create", "Payment", new
+            // Redirect to Payment if coming from booking, else home/dashboard
+            if (carId.HasValue && pickupDate.HasValue && returnDate.HasValue)
             {
-                carId = carId,
+                return RedirectToAction("Create", "Payment", new
+                {
+                    carId,
+                    pickupDate = pickupDate?.ToString("yyyy-MM-dd"),
+                    returnDate = returnDate?.ToString("yyyy-MM-dd")
+                });
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        // ---------------- REGISTER ----------------
+        // GET: show registration form
+        [HttpGet]
+        public IActionResult Create(int? carId, string pickupDate, string returnDate)
+        {
+            ViewBag.CarId = carId;
+            ViewBag.PickupDate = pickupDate;
+            ViewBag.ReturnDate = returnDate;
+            return View();
+        }
+
+        // POST: submit registration
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(User user, int? carId, DateTime? pickupDate, DateTime? returnDate)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.CarId = carId;
+                ViewBag.PickupDate = pickupDate?.ToString("yyyy-MM-dd");
+                ViewBag.ReturnDate = returnDate?.ToString("yyyy-MM-dd");
+                return View(user);
+            }
+
+            var exists = await _db.Users.AnyAsync(u => u.Username == user.Username);
+            if (exists)
+            {
+                ViewBag.Error = "❌ Username already exists.";
+                ViewBag.CarId = carId;
+                ViewBag.PickupDate = pickupDate?.ToString("yyyy-MM-dd");
+                ViewBag.ReturnDate = returnDate?.ToString("yyyy-MM-dd");
+                return View(user);
+            }
+
+            user.Role = "Customer";
+            _db.Users.Add(user);
+            await _db.SaveChangesAsync();
+
+            TempData["Success"] = $"🎉 Registration successful! Please login with username: {user.Username}";
+
+            // Redirect to Login page WITH booking parameters
+            return RedirectToAction("Login", "User", new
+            {
+                carId,
                 pickupDate = pickupDate?.ToString("yyyy-MM-dd"),
                 returnDate = returnDate?.ToString("yyyy-MM-dd")
             });
         }
+
+        // ---------------- LIST USERS ----------------
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             var users = await _db.Users.ToListAsync();
             return View(users);
         }
-        // ---------------- CREATE ----------------
+
+        // ---------------- DETAILS ----------------
         [HttpGet]
-        public IActionResult Create()
-        {
-            return View(); // opens Create.cshtml
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(User user)
-        {
-            if (!ModelState.IsValid)
-                return View(user);
-
-            // Check username uniqueness
-            var exists = await _db.Users.AnyAsync(u => u.Username == user.Username);
-            if (exists)
-            {
-                ViewBag.Error = "❌ Username already exists.";
-                return View(user);
-            }
-
-            // Default role
-            user.Role = "Customer";
-
-            _db.Users.Add(user);
-            await _db.SaveChangesAsync();
-
-            TempData["Success"] = $"🎉 Registration successful! Please login with username: {user.Username}";
-            return RedirectToAction("Login");
-        }
-
         public async Task<IActionResult> Details(int id)
         {
             var user = await _db.Users.FirstOrDefaultAsync(u => u.UserID == id);
-            if (user == null)
-                return NotFound();
-
-            return View(user); // opens Details.cshtml
+            if (user == null) return NotFound();
+            return View(user);
         }
 
         // ---------------- DELETE ----------------
@@ -118,10 +142,8 @@ namespace CarRentalManagement.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var user = await _db.Users.FirstOrDefaultAsync(u => u.UserID == id);
-            if (user == null)
-                return NotFound();
-
-            return View(user); // opens Delete.cshtml
+            if (user == null) return NotFound();
+            return View(user);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -129,8 +151,7 @@ namespace CarRentalManagement.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _db.Users.FindAsync(id);
-            if (user == null)
-                return NotFound();
+            if (user == null) return NotFound();
 
             try
             {
@@ -147,7 +168,6 @@ namespace CarRentalManagement.Controllers
         }
     }
 }
-
 
 
 
